@@ -11,6 +11,9 @@ Thumbs.db
 # Node
 node_modules/
 package-lock.json
+
+# Scripts de DB (administrados localmente)
+init-db.js
 # Editor
 .vscode/
 
