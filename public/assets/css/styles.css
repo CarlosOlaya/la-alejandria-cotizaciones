@@ -273,7 +273,15 @@ body {
     padding: 14px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    position: relative;
+}
+
+.card-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
 }
 
 .card-header h4 {
@@ -285,6 +293,33 @@ body {
 .card-date {
     font-size: 12px;
     opacity: 0.9;
+}
+
+.btn-delete-card {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.btn-delete-card:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-delete-card:active {
+    transform: scale(0.95);
 }
 
 /* Cuerpo de la tarjeta */

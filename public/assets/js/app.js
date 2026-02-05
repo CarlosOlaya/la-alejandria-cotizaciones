@@ -28,9 +28,26 @@ class QuotationSystem {
     }
 
     async saveQuotation(data) {
+        // Mostrar loading
+        Swal.fire({
+            title: 'Guardando cotización...',
+            html: 'Por favor espera un momento',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         try {
             const method = data.id ? 'PUT' : 'POST';
             const url = data.id ? `${API_URL}/quotations/${data.id}` : `${API_URL}/quotations`;
+
+            // Convertir fechas de DD/MM/YY a YYYY-MM-DD
+            const convertDateToISO = (dateStr) => {
+                const [day, month, year] = dateStr.split('/');
+                const fullYear = year.length === 2 ? `20${year}` : year;
+                return `${fullYear}-${month}-${day}`;
+            };
 
             const response = await fetch(url, {
                 method: method,
@@ -39,8 +56,8 @@ class QuotationSystem {
                 },
                 body: JSON.stringify({
                     quotationNumber: parseInt(data.number),
-                    dateExp: data.date,
-                    dateValid: data.validUntil,
+                    dateExp: convertDateToISO(data.date),
+                    dateValid: convertDateToISO(data.validUntil),
                     clientName: data.clientName || 'Sin especificar',
                     clientCCNIT: data.clientCCNIT,
                     clientAddress: data.clientAddress,
@@ -59,12 +76,28 @@ class QuotationSystem {
 
             const quotation = await response.json();
             const message = method === 'PUT' ? 'actualizada' : 'guardada';
-            alert(`✅ Cotización #${data.number} ${message} exitosamente`);
+            
+            // Mostrar éxito
+            await Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: `Cotización #${data.number} ${message} exitosamente`,
+                confirmButtonColor: '#8D6E63',
+                timer: 2000
+            });
             
             return quotation;
         } catch (err) {
             console.error('Error saving quotation:', err);
-            alert('❌ Error al guardar la cotización: ' + err.message);
+            
+            // Mostrar error
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo guardar la cotización: ' + err.message,
+                confirmButtonColor: '#8D6E63'
+            });
+            
             return null;
         }
     }
@@ -78,10 +111,20 @@ class QuotationSystem {
 
             const quotation = await response.json();
 
+            // Convertir fechas de YYYY-MM-DD a DD/MM/YY
+            const convertDateFromISO = (dateStr) => {
+                if (!dateStr) return '';
+                // Manejar formato con tiempo (2026-02-05T00:00:00.000Z) o sin tiempo (2026-02-05)
+                const datePart = dateStr.split('T')[0];
+                const [year, month, day] = datePart.split('-');
+                const shortYear = year.slice(-2);
+                return `${day}/${month}/${shortYear}`;
+            };
+
             document.getElementById('quotationNumber').value = quotation.id;
             document.getElementById('quotNumDisplay').textContent = quotation.quotation_number;
-            document.getElementById('dateExp').textContent = quotation.date_exp;
-            document.getElementById('dateValid').textContent = quotation.date_valid;
+            document.getElementById('dateExp').textContent = convertDateFromISO(quotation.date_exp);
+            document.getElementById('dateValid').textContent = convertDateFromISO(quotation.date_valid);
             document.getElementById('clientName').value = quotation.client_name;
             document.getElementById('clientCCNIT').value = quotation.client_cc_nit;
             document.getElementById('clientAddress').value = quotation.client_address || '';
@@ -106,12 +149,37 @@ class QuotationSystem {
             this.currentQuotation = quotation;
         } catch (err) {
             console.error('Error loading quotation:', err);
-            alert('❌ Error al cargar la cotización: ' + err.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo cargar la cotización: ' + err.message,
+                confirmButtonColor: '#8D6E63'
+            });
         }
     }
 
     async deleteQuotation(id) {
-        if (confirm('¿Eliminar esta cotización?')) {
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta acción no se puede deshacer",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#8D6E63',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (result.isConfirmed) {
+            // Mostrar loading
+            Swal.fire({
+                title: 'Eliminando...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
             try {
                 const response = await fetch(`${API_URL}/quotations/${id}`, {
                     method: 'DELETE'
@@ -121,11 +189,26 @@ class QuotationSystem {
                     throw new Error('Error al eliminar la cotización');
                 }
 
-                alert('✅ Cotización eliminada');
-                await this.refreshDashboard();
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Eliminada!',
+                    text: 'La cotización ha sido eliminada',
+                    confirmButtonColor: '#8D6E63',
+                    timer: 1500
+                });
+
+                // Refrescar después de que el alert desaparezca
+                setTimeout(() => {
+                    this.refreshDashboard();
+                }, 1600);
             } catch (err) {
                 console.error('Error deleting quotation:', err);
-                alert('❌ Error al eliminar la cotización: ' + err.message);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo eliminar la cotización: ' + err.message,
+                    confirmButtonColor: '#8D6E63'
+                });
             }
         }
     }
@@ -155,16 +238,29 @@ class QuotationSystem {
             return;
         }
 
+        // Convertir fechas de YYYY-MM-DD a DD/MM/YY
+        const convertDateFromISO = (dateStr) => {
+            if (!dateStr) return '';
+            // Manejar formato con tiempo (2026-02-05T00:00:00.000Z) o sin tiempo (2026-02-05)
+            const datePart = dateStr.split('T')[0];
+            const [year, month, day] = datePart.split('-');
+            const shortYear = year.slice(-2);
+            return `${day}/${month}/${shortYear}`;
+        };
+
         container.innerHTML = quotations.map(q => `
             <div class="dashboard-card">
                 <div class="card-header">
-                    <h4>#${q.quotation_number}</h4>
-                    <span class="card-date">${q.date_exp}</span>
+                    <div class="card-header-content">
+                        <h4>${q.client_name || 'Sin cliente'}</h4>
+                    </div>
+                    <button class="btn-delete-card" title="Eliminar cotización" onclick="quotationSystem.deleteQuotation(${q.id})">🗑️</button>
                 </div>
                 <div class="card-body">
-                    <p class="client-name">${q.client_name || 'Sin cliente'}</p>
                     <div class="card-meta">
-                        <small>Válido: ${q.date_valid}</small>
+                        <small><strong>#${q.quotation_number}</strong></small>
+                        <small>Fecha: ${convertDateFromISO(q.date_exp)}</small>
+                        <small>Válido hasta: ${convertDateFromISO(q.date_valid)}</small>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -173,7 +269,6 @@ class QuotationSystem {
                 <div class="dashboard-card-actions">
                     <button title="Editar cotización" onclick="window.location.href='cotizacion.html?id=${q.id}'">✏️ Editar</button>
                     <button title="Imprimir cotización" onclick="window.location.href='cotizacion.html?id=${q.id}&print=true'">🖨️ Imprimir</button>
-                    <button title="Eliminar cotización" onclick="quotationSystem.deleteQuotation(${q.id})">🗑️ Eliminar</button>
                 </div>
             </div>
         `).join('');
@@ -215,7 +310,7 @@ function setDefaultDates() {
     const formatDate = (date) => {
         const d = date.getDate().toString().padStart(2, '0');
         const m = (date.getMonth() + 1).toString().padStart(2, '0');
-        const y = date.getFullYear();
+        const y = date.getFullYear().toString().slice(-2);
         return `${d}/${m}/${y}`;
     };
 
@@ -299,7 +394,12 @@ async function saveQuotation() {
     });
 
     if (items.length === 0) {
-        alert('⚠️ Agregue al menos un producto');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Atención',
+            text: 'Agregue al menos un producto',
+            confirmButtonColor: '#8D6E63'
+        });
         return;
     }
 
@@ -323,9 +423,7 @@ async function saveQuotation() {
     
     if (result) {
         // Redirigir al dashboard después de guardar
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1500);
+        window.location.href = 'index.html';
     }
 }
 
