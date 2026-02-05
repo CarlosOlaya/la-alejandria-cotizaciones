@@ -858,6 +858,20 @@ body {
         overflow: hidden;
     }
 
+    /* Contenedor con scroll para la tabla */
+    .items-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid #D7CCC8;
+        border-radius: 4px;
+        margin-bottom: 12px;
+    }
+
+    .items-table-wrapper table {
+        min-width: 100%;
+        margin: 0;
+    }
+
     .items-table th {
         background-color: #F5F5F5;
         color: #6D4C41;
@@ -1145,6 +1159,10 @@ body {
     }
     
     .items-table {
+        page-break-inside: avoid;
+    }
+    
+    .items-table-wrapper {
         page-break-inside: avoid;
     }
     
