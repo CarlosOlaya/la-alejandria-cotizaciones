@@ -1,68 +1,765 @@
-* { box-sizing: border-box; }
-body { font-family: 'Helvetica', sans-serif; color: #5D4037; padding: 20px; background-color: #f5f5f5; }
-.sidebar { position: fixed; left: 0; top: 0; width: 250px; height: 100vh; background-color: #6D4C41; color: white; padding: 20px; overflow-y: auto; z-index: 1000; }
-.sidebar h3 { margin-top: 0; border-bottom: 2px solid #8D6E63; padding-bottom: 10px; }
-.sidebar-section { margin-bottom: 20px; }
-.sidebar-section label { display: block; font-size: 12px; margin-top: 10px; font-weight: bold; }
-.sidebar-section input, .sidebar-section select { width: 100%; padding: 6px; margin-top: 4px; border: none; border-radius: 4px; font-size: 12px; }
-.btn { padding: 8px 12px; margin-top: 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; width: 100%; }
-.btn-primary { background-color: #8D6E63; color: white; }
-.btn-primary:hover { background-color: #A1887F; }
-.btn-success { background-color: #4CAF50; color: white; }
-.btn-success:hover { background-color: #45a049; }
-.btn-danger { background-color: #f44336; color: white; }
-.btn-danger:hover { background-color: #da190b; }
-.main-content { margin-left: 250px; }
-.container { max-width: 900px; margin: 0 auto; border: 1px solid #d7ccc8; padding: 30px; background-color: #fffbf5; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+/* ========================================
+   ESTILOS GLOBALES
+   ======================================== */
 
-/* Encabezado */
-.header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #8D6E63; padding-bottom: 20px; margin-bottom: 20px; }
-.logo-area { display: flex; align-items: center; gap: 15px; }
-.logo-area img { height: 60px; width: auto; }
-.logo-area h1 { margin: 0; color: #6D4C41; font-family: 'Georgia', serif; font-size: 28px; }
-.logo-area p { margin: 2px 0; font-size: 14px; }
-.company-data { text-align: right; font-size: 14px; }
-.company-data strong { display: block; font-size: 16px; color: #6D4C41; margin-bottom: 5px; }
+* { 
+    box-sizing: border-box; 
+}
 
-/* Título Cotización */
-.doc-title { text-align: right; margin-bottom: 30px; }
-.doc-title h2 { background-color: #8D6E63; color: white; display: inline-block; padding: 8px 20px; margin: 0; font-size: 20px; border-radius: 4px; }
-.meta-data { margin-top: 10px; font-size: 13px; text-align: right; }
-.meta-data span { display: block; margin: 3px 0; }
+body { 
+    font-family: 'Helvetica', sans-serif; 
+    color: #5D4037; 
+    padding: 0; 
+    margin: 0; 
+    background-color: #f5f5f5; 
+}
 
-/* Cliente */
-.client-info { border: 1px solid #8D6E63; padding: 15px; border-radius: 8px; margin-bottom: 20px; background-color: #fff; }
-.client-info table { width: 100%; }
-.client-info td { padding: 8px; font-size: 13px; }
-.client-info input { width: 100%; padding: 4px; border: 1px solid #d7ccc8; border-radius: 3px; }
-.label { font-weight: bold; width: 120px; }
+.main-content { 
+    padding: 20px; 
+}
+
+.container { 
+    max-width: 900px; 
+    margin: 0 auto; 
+    border: 1px solid #d7ccc8; 
+    padding: 30px; 
+    background-color: #fffbf5; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+}
+
+.text-right { 
+    text-align: right; 
+}
+
+.text-center { 
+    text-align: center; 
+}
+
+/* ========================================
+   NAVBAR
+   ======================================== */
+
+.navbar { 
+    background-color: #6D4C41; 
+    padding: 15px 20px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+}
+
+.navbar a, 
+.navbar button { 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 12px; 
+    cursor: pointer; 
+    font-size: 14px; 
+    font-weight: bold; 
+    color: white; 
+    position: relative; 
+    z-index: 1; 
+    overflow: hidden; 
+}
+
+/* ========================================
+   BOTONES GLOBALES (Todos los estilos)
+   ======================================== */
+
+.btn-primary, 
+.btn-success, 
+.btn-danger { 
+    position: relative;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    z-index: 1;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-primary { 
+    background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%); 
+}
+
+.btn-success { 
+    background: linear-gradient(135deg, #A1887F 0%, #8D6E63 100%); 
+}
+
+.btn-danger { 
+    background: linear-gradient(135deg, #D7CCC8 0%, #BCAAA4 100%); 
+    color: #5D4037; 
+}
+
+/* Pseudo-elementos para efecto de borde animado */
+.btn-primary::before, 
+.btn-success::before, 
+.btn-danger::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, #8D6E63, #A1887F, #BCAAA4, #D7CCC8, #6D4C41, #8D6E63);
+    background-size: 400% 400%;
+    border-radius: 14px;
+    z-index: -1;
+}
+
+.btn-primary::after, 
+.btn-success::after, 
+.btn-danger::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, #8D6E63, #A1887F, #BCAAA4, #D7CCC8, #6D4C41, #8D6E63);
+    background-size: 400% 400%;
+    border-radius: 14px;
+    z-index: -2;
+    filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Estados hover y focus */
+.btn-primary:hover, 
+.btn-success:hover, 
+.btn-danger:hover,
+.btn-primary:focus, 
+.btn-success:focus, 
+.btn-danger:focus { 
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(109, 76, 65, 0.3);
+    outline: none;
+}
+
+.btn-primary:hover::before, .btn-primary:hover::after,
+.btn-success:hover::before, .btn-success:hover::after,
+.btn-danger:hover::before, .btn-danger:hover::after,
+.btn-primary:focus::before, .btn-primary:focus::after,
+.btn-success:focus::before, .btn-success:focus::after,
+.btn-danger:focus::before, .btn-danger:focus::after {
+    animation: gradientBorder 2s ease infinite;
+}
+
+.btn-primary:hover::after, .btn-success:hover::after, .btn-danger:hover::after,
+.btn-primary:focus::after, .btn-success:focus::after, .btn-danger:focus::after {
+    opacity: 0.7;
+}
+
+/* Estado activo */
+.btn-primary:active, 
+.btn-success:active, 
+.btn-danger:active {
+    transform: scale(0.98);
+}
+
+/* ========================================
+   ENCABEZADO (Compartido)
+   ======================================== */
+
+.header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 3px solid #8D6E63; 
+    padding-bottom: 20px; 
+    margin-bottom: 20px; 
+}
+
+.logo-area { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
+
+.logo-area img { 
+    height: 50px; 
+    width: auto; 
+}
+
+.logo-area h1 { 
+    margin: 0; 
+    color: #6D4C41; 
+    font-family: 'Georgia', serif; 
+    font-size: 24px; 
+}
+
+.logo-area p { 
+    margin: 2px 0; 
+    font-size: 12px; 
+}
+
+.company-data { 
+    text-align: right; 
+    font-size: 12px; 
+}
+
+.company-data strong { 
+    display: block; 
+    font-size: 14px; 
+    color: #6D4C41; 
+    margin-bottom: 3px; 
+}
+
+/* ========================================
+   DASHBOARD (index.html)
+   ======================================== */
+
+/* Bienvenida del Dashboard */
+.dashboard-welcome {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.dashboard-welcome h2 {
+    color: #6D4C41;
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.dashboard-welcome p {
+    color: #999;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+/* Sección del Dashboard */
+.dashboard-section {
+    margin-top: 30px;
+}
+
+.dashboard-section h3 {
+    color: #6D4C41;
+    font-size: 18px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #D7CCC8;
+    padding-bottom: 12px;
+}
+
+/* Grid de tarjetas compactas */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
+
+/* Tarjetas del Dashboard - Diseño compacto */
+.dashboard-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-card:hover {
+    box-shadow: 0 8px 20px rgba(109, 76, 65, 0.15);
+    transform: translateY(-4px);
+    border-color: #8D6E63;
+}
+
+/* Encabezado de la tarjeta */
+.card-header {
+    background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%);
+    color: white;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.card-date {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+/* Cuerpo de la tarjeta */
+.card-body {
+    padding: 14px;
+    flex-grow: 1;
+}
+
+.client-name {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #5D4037;
+}
+
+.card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.card-meta small {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Pie de la tarjeta */
+.card-footer {
+    padding: 12px 14px;
+    background-color: #fafafa;
+    border-top: 1px solid #e0e0e0;
+}
+
+.total-amount {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #4CAF50;
+}
+
+/* Botón con borde gradiente animado - Nueva Cotización */
+.btn-gradient-border {
+    position: relative;
+    display: inline-block;
+    padding: 12px 32px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%);
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.btn-gradient-border::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, #8D6E63, #A1887F, #BCAAA4, #D7CCC8, #6D4C41, #5D4037, #8D6E63);
+    background-size: 400% 400%;
+    border-radius: 14px;
+    z-index: -1;
+}
+
+.btn-gradient-border::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, #8D6E63, #A1887F, #BCAAA4, #D7CCC8, #6D4C41, #5D4037, #8D6E63);
+    background-size: 400% 400%;
+    border-radius: 14px;
+    z-index: -2;
+    filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-gradient-border:hover,
+.btn-gradient-border:focus {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(109, 76, 65, 0.3);
+    outline: none;
+}
+
+.btn-gradient-border:hover::before,
+.btn-gradient-border:hover::after,
+.btn-gradient-border:focus::before,
+.btn-gradient-border:focus::after {
+    animation: gradientBorder 2s ease infinite;
+}
+
+.btn-gradient-border:hover::after,
+.btn-gradient-border:focus::after {
+    opacity: 0.7;
+}
+
+.btn-gradient-border:active {
+    transform: scale(0.98);
+}
+
+/* Botones de acciones del Dashboard */
+.dashboard-card-actions {
+    display: flex;
+    gap: 6px;
+    padding: 10px;
+    background-color: #fafafa;
+    border-top: 1px solid #e0e0e0;
+}
+
+.dashboard-card-actions button {
+    flex: 1;
+    padding: 8px;
+    font-size: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%);
+}
+
+.dashboard-card-actions button::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #8D6E63, #A1887F, #BCAAA4, #D7CCC8, #6D4C41, #8D6E63);
+    background-size: 300% 300%;
+    border-radius: 10px;
+    z-index: -1;
+}
+
+.dashboard-card-actions button::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #8D6E63, #A1887F, #BCAAA4, #D7CCC8, #6D4C41, #8D6E63);
+    background-size: 300% 300%;
+    border-radius: 10px;
+    z-index: -2;
+    filter: blur(6px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dashboard-card-actions button:hover,
+.dashboard-card-actions button:focus {
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(109, 76, 65, 0.3);
+    outline: none;
+}
+
+.dashboard-card-actions button:hover::before,
+.dashboard-card-actions button:hover::after,
+.dashboard-card-actions button:focus::before,
+.dashboard-card-actions button:focus::after {
+    animation: gradientBorder 2s ease infinite;
+}
+
+.dashboard-card-actions button:hover::after,
+.dashboard-card-actions button:focus::after {
+    opacity: 0.6;
+}
+
+.dashboard-card-actions button:active {
+    transform: scale(1);
+}
+
+/* ========================================
+   FORMULARIO DE COTIZACIÓN (cotizacion.html)
+   ======================================== */
+
+/* Título de Cotización */
+.doc-title { 
+    text-align: right; 
+    margin-bottom: 20px; 
+}
+
+.doc-title h2 { 
+    background-color: #8D6E63; 
+    color: white; 
+    display: inline-block; 
+    padding: 6px 15px; 
+    margin: 0; 
+    font-size: 18px; 
+    border-radius: 4px; 
+}
+
+.meta-data { 
+    margin-top: 8px; 
+    font-size: 12px; 
+    text-align: right; 
+}
+
+.meta-data span { 
+    display: block; 
+    margin: 2px 0; 
+}
+
+/* Información del Cliente */
+.client-info { 
+    border: 1px solid #8D6E63; 
+    padding: 12px; 
+    border-radius: 8px; 
+    margin-bottom: 15px; 
+    background-color: #fff; 
+}
+
+.client-info table { 
+    width: 100%; 
+}
+
+.client-info td { 
+    padding: 6px; 
+    font-size: 12px; 
+}
+
+.client-info input { 
+    width: 100%; 
+    padding: 3px; 
+    border: 1px solid #d7ccc8; 
+    border-radius: 3px; 
+}
+
+.label { 
+    font-weight: bold; 
+    width: 120px; 
+}
 
 /* Tabla de Productos */
-.items-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-.items-table th { background-color: #8D6E63; color: white; padding: 10px; text-align: left; font-size: 13px; }
-.items-table td { border-bottom: 1px solid #d7ccc8; padding: 8px; font-size: 13px; }
-.items-table input { width: 100%; padding: 4px; border: 1px solid #ddd; border-radius: 3px; }
-.items-table tr:nth-child(even) { background-color: #efebe9; }
-.text-right { text-align: right; }
-.text-center { text-align: center; }
-.delete-row { background-color: #ffebee; color: #c62828; cursor: pointer; padding: 4px 8px; border-radius: 3px; border: none; font-size: 11px; }
+.items-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-bottom: 15px; 
+}
+
+.items-table th { 
+    background-color: #8D6E63; 
+    color: white; 
+    padding: 8px; 
+    text-align: left; 
+    font-size: 12px; 
+}
+
+.items-table td { 
+    border-bottom: 1px solid #d7ccc8; 
+    padding: 6px; 
+    font-size: 12px; 
+}
+
+.items-table input { 
+    width: 100%; 
+    padding: 3px; 
+    border: 1px solid #ddd; 
+    border-radius: 3px; 
+}
+
+.item-quantity { 
+    min-width: 70px; 
+}
+
+.item-unit, 
+.item-discount { 
+    min-width: 90px; 
+}
+
+.items-table tr:nth-child(even) { 
+    background-color: #efebe9; 
+}
+
+.delete-row { 
+    background-color: #ffebee; 
+    color: #c62828; 
+    cursor: pointer; 
+    padding: 3px 6px; 
+    border-radius: 3px; 
+    border: none; 
+    font-size: 10px; 
+}
 
 /* Totales */
-.totals { float: right; width: 320px; margin-top: 10px; }
-.totals table { width: 100%; border-collapse: collapse; }
-.totals td { padding: 8px; font-size: 14px; }
-.totals input { width: 100%; padding: 4px; border: 1px solid #ddd; text-align: right; }
-.total-final { background-color: #6D4C41; color: white; font-weight: bold; }
+.totals { 
+    float: right; 
+    width: 300px; 
+    margin-top: 5px; 
+}
+
+.totals table { 
+    width: 100%; 
+    border-collapse: collapse; 
+}
+
+.totals td { 
+    padding: 6px; 
+    font-size: 13px; 
+}
+
+.totals input { 
+    width: 100%; 
+    padding: 3px; 
+    border: 1px solid #ddd; 
+    text-align: right; 
+}
+
+.total-final { 
+    background-color: #6D4C41; 
+    color: white; 
+    font-weight: bold; 
+}
 
 /* Pie de Página */
-.footer { clear: both; margin-top: 60px; border-top: 1px solid #8D6E63; padding-top: 15px; font-size: 12px; }
-.terms { color: #555; font-style: italic; }
+.footer { 
+    clear: both; 
+    margin-top: 40px; 
+    border-top: 1px solid #8D6E63; 
+    padding-top: 12px; 
+    font-size: 11px; 
+}
 
-/* Print */
+.terms { 
+    color: #555; 
+    font-style: italic; 
+}
+
+/* ========================================
+   ANIMACIONES
+   ======================================== */
+
+@keyframes gradientBorder {
+    0% { 
+        background-position: 0% 50%; 
+    }
+    50% { 
+        background-position: 100% 50%; 
+    }
+    100% { 
+        background-position: 0% 50%; 
+    }
+}
+
+/* Botones de acciones del Dashboard */
+.dashboard-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.dashboard-card-actions button {
+    flex: 1;
+    padding: 6px;
+    font-size: 11px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    font-weight: 600;
+}
+
+.dashboard-card-actions button::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #8D6E63, #A1887F, #BCAAA4, #D7CCC8, #6D4C41, #8D6E63);
+    background-size: 300% 300%;
+    border-radius: 12px;
+    z-index: -1;
+}
+
+.dashboard-card-actions button::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #8D6E63, #A1887F, #BCAAA4, #D7CCC8, #6D4C41, #8D6E63);
+    background-size: 300% 300%;
+    border-radius: 12px;
+    z-index: -2;
+    filter: blur(6px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dashboard-card-actions button:hover,
+.dashboard-card-actions button:focus {
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(109, 76, 65, 0.3);
+    outline: none;
+}
+
+.dashboard-card-actions button:hover::before,
+.dashboard-card-actions button:hover::after,
+.dashboard-card-actions button:focus::before,
+.dashboard-card-actions button:focus::after {
+    animation: gradientBorder 2s ease infinite;
+}
+
+.dashboard-card-actions button:hover::after,
+.dashboard-card-actions button:focus::after {
+    opacity: 0.6;
+}
+
+.dashboard-card-actions button:active {
+    transform: scale(1);
+}
+
+/* ========================================
+   PRINT (Impresión)
+   ======================================== */
+
 @media print {
-    .sidebar { display: none; }
-    .main-content { margin-left: 0; }
-    .btn { display: none; }
-    .sidebar-section { display: none; }
-    body { padding: 0; }
+    .navbar { 
+        display: none; 
+    }
+    
+    body { 
+        padding: 0; 
+    }
+    
+    .main-content { 
+        padding: 0; 
+    }
+    
+    .container { 
+        border: none; 
+        box-shadow: none; 
+        padding: 0; 
+    }
+    
+    /* Ocultar botones de acciones en impresión */
+    div[style*="text-align: right"] { 
+        display: none; 
+    }
+    
+    /* Ocultar el botón volver */
+    a.btn.btn-danger { 
+        display: none; 
+    }
+    
+    .items-table th, 
+    .items-table td { 
+        padding: 10px 6px; 
+    }
+    
+    /* Mantener la estructura limpia */
+    .header { 
+        border-bottom: none; 
+        padding-bottom: 10px; 
+    }
+    
+    .footer { 
+        margin-top: 20px; 
+    }
 }
