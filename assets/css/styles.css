@@ -508,7 +508,7 @@ body {
 /* Información del Cliente */
 .client-info { 
     border: 1px solid #8D6E63; 
-    padding: 12px; 
+    padding: 6px; 
     border-radius: 8px; 
     margin-bottom: 15px; 
     background-color: #fff; 
@@ -519,7 +519,7 @@ body {
 }
 
 .client-info td { 
-    padding: 6px; 
+    padding: 3px; 
     font-size: 12px; 
 }
 
@@ -532,7 +532,7 @@ body {
 
 .label { 
     font-weight: 700; 
-    width: 120px;
+    width: 60px;
     color: #8D6E63;
     font-size: 11px;
     letter-spacing: 0.3px;
@@ -768,17 +768,33 @@ body {
     }
     
     .main-content { 
-        padding: 15mm;
+        padding: 3mm;
         background: white;
     }
     
     .container { 
         border: 1px solid #D7CCC8;
         box-shadow: none;
-        padding: 20px;
+        padding: 5px;
         max-width: 100%;
         margin: 0;
         background: white;
+    }
+    
+    /* Inputs se ven como texto normal en print */
+    input, textarea, select {
+        border: none !important;
+        background: transparent !important;
+        color: #000 !important;
+        font-family: inherit;
+        font-size: inherit;
+        padding: 0 !important;
+        margin: 0 !important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        box-shadow: none !important;
+        outline: none !important;
     }
     
     /* Ocultar botón volver */
