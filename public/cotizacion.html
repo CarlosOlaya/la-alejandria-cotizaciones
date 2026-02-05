@@ -11,8 +11,8 @@
 <body>
 
 <div class="main-content">
-<div style="margin-bottom: 15px;">
-    <a href="index.html" class="btn btn-danger" style="text-decoration: none; display: inline-block; padding: 8px 15px; font-size: 13px;">← Volver</a>
+<div class="back-button-wrapper">
+    <a href="index.html" class="btn btn-back">← Volver</a>
 </div>
 
 <div class="container">
@@ -77,7 +77,7 @@
             </tbody>
         </table>
     </div>
-    <button class="btn btn-primary" onclick="addItemRow()" style="margin-bottom: 20px;">+ Agregar Producto</button>
+    <button class="btn btn-primary btn-add-item" onclick="addItemRow()">+ Agregar Producto</button>
 
     <div class="totals">
         <table>
@@ -105,9 +105,9 @@
         </p>
     </div>
 
-    <div style="text-align: right; margin-top: 20px; padding-top: 15px; border-top: 1px solid #d7ccc8;">
-        <button class="btn btn-success" onclick="saveQuotation()" style="padding: 10px 20px; font-size: 13px; margin-right: 8px;">💾 Guardar</button>
-        <button class="btn btn-primary" onclick="printQuotation()" style="padding: 10px 20px; font-size: 13px;">🖨️ Imprimir</button>
+    <div class="actions-footer">
+        <button class="btn btn-success btn-save" onclick="saveQuotation()">💾 Guardar</button>
+        <button class="btn btn-primary btn-print" onclick="printQuotation()">🖨️ Imprimir</button>
     </div>
 </div>
 </div>

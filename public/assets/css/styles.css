@@ -1216,3 +1216,39 @@ body {
         max-height: 40px;
     }
 }
+
+/* ========================================
+   CLASES UTILIZADAS EN COTIZACION.HTML
+   ======================================== */
+
+.back-button-wrapper {
+    margin-bottom: 15px;
+}
+
+.btn-back {
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 15px;
+    font-size: 13px;
+}
+
+.btn-add-item {
+    margin-bottom: 20px;
+}
+
+.btn-save,
+.btn-print {
+    padding: 10px 20px;
+    font-size: 13px;
+}
+
+.btn-save {
+    margin-right: 8px;
+}
+
+.actions-footer {
+    text-align: right;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #d7ccc8;
+}
