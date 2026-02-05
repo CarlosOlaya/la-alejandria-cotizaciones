@@ -104,13 +104,41 @@
 
     <div style="text-align: right; margin-top: 20px; padding-top: 15px; border-top: 1px solid #d7ccc8;">
         <button class="btn btn-success" onclick="saveQuotation()" style="padding: 10px 20px; font-size: 13px; margin-right: 8px;">💾 Guardar</button>
-        <button class="btn btn-primary" onclick="window.print()" style="padding: 10px 20px; font-size: 13px;">🖨️ Imprimir</button>
+        <button class="btn btn-primary" onclick="printQuotation()" style="padding: 10px 20px; font-size: 13px;">🖨️ Imprimir</button>
     </div>
 </div>
 </div>
 
 <script src="assets/js/app.js"></script>
 <script>
+    // Función para generar el nombre del PDF
+    function generatePDFName() {
+        const clientName = document.getElementById('clientName').value.trim() || 'Cotizacion';
+        const dateExpInput = document.getElementById('dateExp').textContent;
+        
+        // Convertir la fecha de formato dd/mm/yyyy a dd_mm_yy
+        let fileName = clientName.toUpperCase().replace(/\s+/g, '_');
+        
+        if (dateExpInput && dateExpInput !== '__/__/____') {
+            const [day, month, year] = dateExpInput.split('/');
+            const shortYear = year.slice(-2);
+            fileName += `_${day}_${month}_${shortYear}`;
+        }
+        
+        return fileName;
+    }
+    
+    // Función para imprimir con nombre de archivo personalizado
+    function printQuotation() {
+        const pdfName = generatePDFName();
+        document.title = pdfName;
+        window.print();
+        // Restaurar título original después de un pequeño delay
+        setTimeout(() => {
+            document.title = 'Cotización La Alejandría';
+        }, 500);
+    }
+
     // Inicializar página de cotización
     document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -130,7 +158,12 @@
                 // Si hay parámetro print, ejecutar impresión automática
                 if (shouldPrint) {
                     setTimeout(() => {
+                        const pdfName = generatePDFName();
+                        document.title = pdfName;
                         window.print();
+                        setTimeout(() => {
+                            document.title = 'Cotización La Alejandría';
+                        }, 500);
                     }, 300);
                 }
             }, 100);

@@ -736,6 +736,307 @@ body {
 }
 
 /* ========================================
+   RESPONSIVE (Móvil y Tablets)
+   ======================================== */
+
+/* Dispositivos pequeños (móviles) */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 12px;
+        border-radius: 8px;
+        margin: 0;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    /* Header responsive */
+    .header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+        padding-bottom: 12px;
+        margin-bottom: 12px;
+    }
+
+    .logo-area {
+        justify-content: center;
+    }
+
+    .logo-area img {
+        height: 40px;
+    }
+
+    .logo-area h1 {
+        font-size: 18px;
+    }
+
+    .company-data {
+        text-align: center;
+        font-size: 11px;
+    }
+
+    .company-data strong {
+        font-size: 12px;
+    }
+
+    /* Título de cotización */
+    .doc-title {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .doc-title h2 {
+        font-size: 16px;
+    }
+
+    .meta-data {
+        text-align: center;
+        font-size: 10px;
+    }
+
+    .meta-data span {
+        display: inline-block;
+        margin: 0 6px;
+    }
+
+    /* Información del cliente - Mejor para móvil */
+    .client-info {
+        border: 1px solid #BCAAA4;
+        padding: 8px;
+        margin-bottom: 12px;
+        border-radius: 6px;
+    }
+
+    .client-info table {
+        width: 100%;
+    }
+
+    .client-info tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+        gap: 0;
+    }
+
+    .client-info td {
+        padding: 6px 0;
+        font-size: 13px;
+        width: 100%;
+        display: block;
+    }
+
+    .client-info td.label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #6D4C41;
+        margin-bottom: 3px;
+        padding: 0;
+    }
+
+    .client-info input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #BCAAA4;
+        border-radius: 4px;
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .client-info tr:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Tabla de productos - Scroll horizontal en móvil */
+    .items-table {
+        font-size: 11px;
+        margin-bottom: 12px;
+        border: 1px solid #D7CCC8;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .items-table th {
+        background-color: #F5F5F5;
+        color: #6D4C41;
+        padding: 8px 6px;
+        font-size: 10px;
+        font-weight: 700;
+        border-bottom: 1px solid #BCAAA4;
+    }
+
+    .items-table td {
+        padding: 8px 6px;
+        font-size: 12px;
+        border-bottom: 1px solid #E5DDD5;
+    }
+
+    .items-table input {
+        padding: 8px;
+        font-size: 13px;
+        border: 1px solid #BCAAA4;
+    }
+
+    .delete-row {
+        padding: 6px 8px;
+        font-size: 10px;
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Botón agregar producto */
+    button[onclick*="addItemRow"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+
+    /* Totales */
+    .totals {
+        float: none;
+        width: 100%;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .totals table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .totals td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .total-final td {
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .totals input {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    /* Botones en móvil */
+    .btn-primary,
+    .btn-success,
+    .btn-danger {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+        margin-bottom: 8px;
+        border-radius: 6px;
+    }
+
+    /* Sección de botones de guardar/imprimir */
+    div[style*="text-align: right"] {
+        display: flex !important;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    div[style*="text-align: right"] button {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    /* Botón volver */
+    div[style*="margin-bottom: 15px"] {
+        display: block !important;
+        margin-bottom: 12px;
+    }
+
+    div[style*="margin-bottom: 15px"] a {
+        width: 100%;
+        padding: 12px;
+        font-size: 13px;
+        text-align: center;
+        display: block;
+    }
+
+    /* Footer términos */
+    .footer {
+        margin-top: 15px;
+        padding-top: 12px;
+        font-size: 10px;
+    }
+
+    .terms {
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+    /* Dashboard responsive */
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .dashboard-welcome h2 {
+        font-size: 20px;
+    }
+
+    .dashboard-card {
+        border-radius: 8px;
+    }
+
+    .card-header {
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .card-body {
+        padding: 12px;
+    }
+
+    .card-footer {
+        padding: 10px 12px;
+    }
+
+    .dashboard-card-actions {
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .dashboard-card-actions button {
+        padding: 10px;
+        font-size: 12px;
+    }
+}
+
+/* Tablets (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        max-width: 95%;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 14px;
+    }
+
+    .totals {
+        width: 280px;
+    }
+
+    .client-info input {
+        padding: 5px;
+    }
+
+    .items-table input {
+        padding: 5px;
+    }
+}
+
+/* ========================================
    PRINT (Impresión)
    ======================================== */
 
