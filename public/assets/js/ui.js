@@ -143,14 +143,19 @@ function initHeaderButtons() {
 async function updateProcessInfo() {
     try {
         const response = await fetch('/api/quotations');
-        const data = await response.json();
         
-        if (!data.success || !data.quotations) {
+        if (!response.ok) {
             console.error('Error obteniendo datos');
             return;
         }
         
-        const quotations = data.quotations;
+        const quotations = await response.json();
+        
+        if (!Array.isArray(quotations)) {
+            console.error('Formato de datos incorrecto');
+            return;
+        }
+        
         const totalQuotations = quotations.length;
         const totalAmount = quotations.reduce((sum, q) => sum + parseFloat(q.total_amount || 0), 0);
         const averageAmount = totalQuotations > 0 ? totalAmount / totalQuotations : 0;
@@ -166,7 +171,7 @@ async function updateProcessInfo() {
         const averageAmountEl = document.getElementById('average-amount');
         
         if (totalQuotationsEl) totalQuotationsEl.textContent = totalQuotations;
-        if (currentMonthEl) currentMonthEl.textContent = currentMonth + ' 2024';
+        if (currentMonthEl) currentMonthEl.textContent = currentMonth + ' 2026';
         if (totalAmountEl) totalAmountEl.textContent = `$ ${totalAmount.toLocaleString('es-CO', { minimumFractionDigits: 2 })}`;
         if (averageAmountEl) averageAmountEl.textContent = `$ ${averageAmount.toLocaleString('es-CO', { minimumFractionDigits: 2 })}`;
         
