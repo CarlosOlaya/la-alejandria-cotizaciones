@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#8D6E63">
     
     <!-- Favicon -->
-    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,6 +49,13 @@
     <script>
         document.body.style.visibility = 'visible';
         requestAnimationFrame(() => document.body.classList.add('page-loaded'));
+    </script>
+
+    <!-- Cargar colores de empresa antes que app.js -->
+    <script src="assets/js/app.js"></script>
+    <script>
+        // Cargar colores de empresa al iniciar
+        loadEmpresaColors();
     </script>
 
     <div class="container">

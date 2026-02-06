@@ -3,6 +3,11 @@
    ======================================== */
 
 :root {
+    /* Variables de empresa (dinámicas) */
+    --empresa-primary: #ff6b35;
+    --empresa-secondary: #4ecdc4;
+    
+    /* Variables originales para la app */
     --color-primary: #8D6E63;
     --color-primary-dark: #6D4C41;
     --color-secondary: #A1887F;

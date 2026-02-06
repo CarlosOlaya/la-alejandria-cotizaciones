@@ -11,6 +11,31 @@ function getAuthHeaders() {
     };
 }
 
+// Cargar colores de la empresa y aplicar como CSS variables
+async function loadEmpresaColors() {
+    try {
+        const response = await fetch(`${API_URL}/auth/empresas/mi-empresa`, {
+            headers: getAuthHeaders()
+        });
+        
+        if (response.ok) {
+            const empresa = await response.json();
+            
+            // Aplicar colores como variables CSS
+            const root = document.documentElement;
+            if (empresa.color_primary) {
+                root.style.setProperty('--empresa-primary', empresa.color_primary);
+            }
+            if (empresa.color_secondary) {
+                root.style.setProperty('--empresa-secondary', empresa.color_secondary);
+            }
+        }
+    } catch (err) {
+        console.error('Error loading empresa colors:', err);
+        // Usar colores por defecto si hay error
+    }
+}
+
 class QuotationSystem {
     constructor() {
         this.quotations = [];

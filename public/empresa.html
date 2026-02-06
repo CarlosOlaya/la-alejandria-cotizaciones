@@ -498,11 +498,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="color_oscuro">Color Oscuro</label>
+                            <label for="color_secondary">Color Secundario</label>
                             <div class="color-input-group">
-                                <div class="color-preview" id="colorOscuroPreview" style="background: #0a0e14;"></div>
-                                <input type="color" id="color_oscuro" name="color_oscuro" value="#0a0e14" class="color-input">
-                                <input type="text" id="color_oscuro_text" readonly placeholder="#0a0e14" style="flex: 1; background: rgba(255, 255, 255, 0.05);"/>
+                                <div class="color-preview" id="colorSecundarioPreview" style="background: #4ecdc4;"></div>
+                                <input type="color" id="color_secondary" name="color_secondary" value="#4ecdc4" class="color-input">
+                                <input type="text" id="color_secondary_text" readonly placeholder="#4ecdc4" style="flex: 1; background: rgba(255, 255, 255, 0.05);"/>
                             </div>
                         </div>
                     </div>
@@ -524,11 +524,11 @@
         const logoPreview = document.getElementById('logoPreview');
         const logoImg = document.getElementById('logoImg');
         const colorPrimarioInput = document.getElementById('color_primario');
-        const colorOscuroInput = document.getElementById('color_oscuro');
+        const colorSecundarioInput = document.getElementById('color_secondary');
         const colorPrimariaPreview = document.getElementById('colorPrimariaPreview');
-        const colorOscuroPreview = document.getElementById('colorOscuroPreview');
+        const colorSecundarioPreview = document.getElementById('colorSecundarioPreview');
         const colorPrimariaText = document.getElementById('color_primario_text');
-        const colorOscuroText = document.getElementById('color_oscuro_text');
+        const colorSecundarioText = document.getElementById('color_secondary_text');
 
         // Cargar empresa desde localStorage si existe
         const empresaActual = localStorage.getItem('empresaActual');
@@ -542,8 +542,8 @@
             document.getElementById('descripcion').value = empresa.descripcion || '';
             document.getElementById('incluye_iva').checked = empresa.incluye_iva !== false;
             document.getElementById('iva_porcentaje').value = empresa.iva_porcentaje || 19;
-            colorPrimarioInput.value = empresa.color_primario || '#ff6b35';
-            colorOscuroInput.value = empresa.color_oscuro || '#0a0e14';
+            colorPrimarioInput.value = empresa.color_primary || '#ff6b35';
+            colorSecundarioInput.value = empresa.color_secondary || '#4ecdc4';
             actualizarPreviewColores();
             if (empresa.logo_url) {
                 logoImg.src = empresa.logo_url;
@@ -589,15 +589,15 @@
         // Actualizar vista previa de colores
         function actualizarPreviewColores() {
             const colorPrimario = colorPrimarioInput.value;
-            const colorOscuro = colorOscuroInput.value;
+            const colorSecundario = colorSecundarioInput.value;
             colorPrimariaPreview.style.background = colorPrimario;
-            colorOscuroPreview.style.background = colorOscuro;
+            colorSecundarioPreview.style.background = colorSecundario;
             colorPrimariaText.value = colorPrimario;
-            colorOscuroText.value = colorOscuro;
+            colorSecundarioText.value = colorSecundario;
         }
 
         colorPrimarioInput.addEventListener('input', actualizarPreviewColores);
-        colorOscuroInput.addEventListener('input', actualizarPreviewColores);
+        colorSecundarioInput.addEventListener('input', actualizarPreviewColores);
 
         // Enviar formulario
         form.addEventListener('submit', async (e) => {
@@ -612,8 +612,8 @@
                 descripcion: document.getElementById('descripcion').value.trim(),
                 incluye_iva: document.getElementById('incluye_iva').checked,
                 iva_porcentaje: parseFloat(document.getElementById('iva_porcentaje').value),
-                color_primario: colorPrimarioInput.value,
-                color_oscuro: colorOscuroInput.value,
+                color_primary: colorPrimarioInput.value,
+                color_secondary: colorSecundarioInput.value,
                 logo_url: document.getElementById('logo_url').value
             };
 
