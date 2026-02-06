@@ -59,7 +59,9 @@ async function loadQuotationsToSidebar() {
     if (!quotationsList) return;
     
     try {
-        const response = await fetch('/api/quotations');
+        const response = await fetch('/api/quotations', {
+            headers: getAuthHeaders()
+        });
         const data = await response.json();
         
         if (!data.success || !data.quotations.length) {
@@ -228,7 +230,10 @@ async function deleteQuotation(id) {
     if (!confirmed.isConfirmed) return;
     
     try {
-        const response = await fetch(`/api/quotations/${id}`, { method: 'DELETE' });
+        const response = await fetch(`/api/quotations/${id}`, { 
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        });
         const data = await response.json();
         
         if (data.success) {

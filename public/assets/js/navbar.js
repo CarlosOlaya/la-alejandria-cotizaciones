@@ -108,13 +108,14 @@ function navigateWithTransition(url) {
 function highlightActiveButton() {
     const currentPath = window.location.pathname;
     const buttons = {
-        'index.html': document.getElementById('dashboard-btn'),
-        'cotizacion.html': document.getElementById('new-quotation-btn'),
-        'productos.html': document.getElementById('products-btn')
+        '/': document.getElementById('dashboard-btn'),
+        '/dashboard': document.getElementById('dashboard-btn'),
+        '/cotizacion': document.getElementById('new-quotation-btn'),
+        '/productos': document.getElementById('products-btn')
     };
 
     Object.values(buttons).forEach(btn => btn?.classList.remove('btn-active'));
-    buttons[currentPage]?.classList.add('btn-active');
+    buttons[currentPath]?.classList.add('btn-active');
 }
 
 // Inicialización

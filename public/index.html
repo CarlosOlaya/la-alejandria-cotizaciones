@@ -27,6 +27,13 @@
     <script src="assets/js/navbar.js"></script>
     <script src="assets/js/app.js"></script>
     <script>
+        // Sistema de debug - guardar errores en localStorage
+        window.debugErrors = [];
+        window.addEventListener('error', (e) => {
+            window.debugErrors.push({type: 'error', message: e.message, stack: e.stack});
+            localStorage.setItem('debugErrors', JSON.stringify(window.debugErrors));
+        });
+        
         // Verificar autenticación antes de cargar
         const token = localStorage.getItem('token');
         if (!token) {
@@ -37,14 +44,30 @@
         (async () => {
             try {
                 const response = await fetch('/api/auth/verificar', {
+                    method: 'POST',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 
+                const debugMsg = `[DEBUG] Response status: ${response.status}`;
+                console.log(debugMsg);
+                window.debugErrors.push({type: 'debug', message: debugMsg});
+                
                 if (!response.ok) {
-                    throw new Error('Token inválido');
+                    const errorText = await response.text();
+                    const err = `Token inválido. Status: ${response.status}. Response: ${errorText}`;
+                    window.debugErrors.push({type: 'error', message: err});
+                    localStorage.setItem('debugErrors', JSON.stringify(window.debugErrors));
+                    throw new Error(err);
                 }
                 
                 const data = await response.json();
+                console.log('Usuario data:', data);
+                window.debugErrors.push({type: 'debug', message: `User data loaded: ${JSON.stringify(data)}`});
+                
+                if (!data.usuario || !data.usuario.id) {
+                    throw new Error('Usuario data inválido: ' + JSON.stringify(data));
+                }
+                
                 localStorage.setItem('userId', data.usuario.id);
                 localStorage.setItem('empresaId', data.empresa.id);
                 
@@ -52,14 +75,19 @@
                 document.body.style.visibility = 'visible';
                 
                 // Cargar colores de empresa
+                console.log('Loading empresa colors...');
                 await loadEmpresaColors();
+                console.log('Empresa colors loaded');
                 
             } catch (err) {
                 console.error('Error de autenticación:', err);
+                window.debugErrors.push({type: 'error', message: 'Auth error: ' + err.message});
+                localStorage.setItem('debugErrors', JSON.stringify(window.debugErrors));
                 localStorage.removeItem('token');
                 localStorage.removeItem('userId');
                 localStorage.removeItem('empresaId');
-                window.location.href = '/login';
+                // Espera 1 segundo antes de redirigir
+                setTimeout(() => window.location.href = '/login', 1000);
             }
         })();
     </script>
@@ -118,7 +146,7 @@
     <!-- ====================================================================
          JAVASCRIPT - MÓDULOS
          ==================================================================== -->
-    <script src="assets/js/app.js"></script>
+    <!-- app.js ya está cargado en <head> -->
     <script src="assets/js/ui.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
