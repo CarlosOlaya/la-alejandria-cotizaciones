@@ -24,6 +24,27 @@
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body style="visibility: hidden;">
+    <script>
+        // Verificar autenticación antes de cargar
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Verificar que el token sea válido
+        fetch('/api/auth/verificar', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(r => {
+            if (!r.ok) throw new Error('Token inválido');
+            return r.json();
+        })
+        .catch(err => {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        });
+    </script>
+
     <script src="assets/js/navbar.js"></script>
     <script>
         document.body.style.visibility = 'visible';
