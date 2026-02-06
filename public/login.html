@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cotizaciones</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         * {
             margin: 0;
@@ -613,14 +614,24 @@
 
             // Validaciones
             if (!email) {
-                document.getElementById('loginEmailError').textContent = 'El email es requerido';
-                document.getElementById('loginEmailError').classList.add('show');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campo Requerido',
+                    text: 'Por favor ingresa tu email',
+                    confirmButtonColor: '#ff6b35',
+                    confirmButtonText: 'Entendido'
+                });
                 return;
             }
 
             if (!password) {
-                document.getElementById('loginPasswordError').textContent = 'La contraseña es requerida';
-                document.getElementById('loginPasswordError').classList.add('show');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campo Requerido',
+                    text: 'Por favor ingresa tu contraseña',
+                    confirmButtonColor: '#ff6b35',
+                    confirmButtonText: 'Entendido'
+                });
                 return;
             }
 
@@ -641,16 +652,35 @@
                     localStorage.setItem('empresaId', data.empresaId);
                     localStorage.setItem('userId', data.userId);
                     
-                    // Redirigir al dashboard
-                    window.location.href = '/dashboard';
+                    // Mostrar mensaje de éxito
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Bienvenido!',
+                        text: 'Iniciando sesión...',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        confirmButtonColor: '#ff6b35'
+                    }).then(() => {
+                        window.location.href = '/dashboard';
+                    });
                 } else {
-                    document.getElementById('loginError').textContent = data.message || 'Error en la autenticación';
-                    document.getElementById('loginError').classList.add('show');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de Autenticación',
+                        text: data.message || 'Email o contraseña incorrectos',
+                        confirmButtonColor: '#ff6b35',
+                        confirmButtonText: 'Intentar de Nuevo'
+                    });
                 }
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('loginError').textContent = 'Error de conexión. Intenta de nuevo.';
-                document.getElementById('loginError').classList.add('show');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Conexión',
+                    text: 'No se pudo conectar al servidor. Intenta de nuevo.',
+                    confirmButtonColor: '#ff6b35',
+                    confirmButtonText: 'Entendido'
+                });
             } finally {
                 loginBtn.disabled = false;
             }
@@ -667,33 +697,49 @@
             const confirmPassword = document.getElementById('registerConfirmPassword').value;
 
             // Validaciones
-            let hasError = false;
-
             if (!nombre) {
-                document.getElementById('registerNameError').textContent = 'El nombre es requerido';
-                document.getElementById('registerNameError').classList.add('show');
-                hasError = true;
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campo Requerido',
+                    text: 'Por favor ingresa tu nombre completo',
+                    confirmButtonColor: '#ff6b35',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
             }
 
             if (!email) {
-                document.getElementById('registerEmailError').textContent = 'El email es requerido';
-                document.getElementById('registerEmailError').classList.add('show');
-                hasError = true;
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campo Requerido',
+                    text: 'Por favor ingresa tu email',
+                    confirmButtonColor: '#ff6b35',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
             }
 
             if (!password || password.length < 6) {
-                document.getElementById('registerPasswordError').textContent = 'La contraseña debe tener al menos 6 caracteres';
-                document.getElementById('registerPasswordError').classList.add('show');
-                hasError = true;
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Contraseña Débil',
+                    text: 'La contraseña debe tener al menos 6 caracteres',
+                    confirmButtonColor: '#ff6b35',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
             }
 
             if (password !== confirmPassword) {
-                document.getElementById('registerConfirmPasswordError').textContent = 'Las contraseñas no coinciden';
-                document.getElementById('registerConfirmPasswordError').classList.add('show');
-                hasError = true;
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Contraseñas No Coinciden',
+                    text: 'Por favor verifica que las contraseñas sean iguales',
+                    confirmButtonColor: '#ff6b35',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
             }
-
-            if (hasError) return;
 
             registerBtn.disabled = true;
 
@@ -707,17 +753,34 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert('¡Registro exitoso! Por favor inicia sesión.');
-                    switchToLogin();
-                    document.getElementById('loginEmail').value = email;
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Registro Exitoso!',
+                        text: 'Tu cuenta ha sido creada correctamente. Por favor inicia sesión.',
+                        confirmButtonColor: '#ff6b35',
+                        confirmButtonText: 'Continuar'
+                    }).then(() => {
+                        switchToLogin();
+                        document.getElementById('loginEmail').value = email;
+                    });
                 } else {
-                    document.getElementById('registerError').textContent = data.message || 'Error en el registro';
-                    document.getElementById('registerError').classList.add('show');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en el Registro',
+                        text: data.message || 'Ocurrió un error al registrarse',
+                        confirmButtonColor: '#ff6b35',
+                        confirmButtonText: 'Intentar de Nuevo'
+                    });
                 }
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('registerError').textContent = 'Error de conexión. Intenta de nuevo.';
-                document.getElementById('registerError').classList.add('show');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Conexión',
+                    text: 'No se pudo conectar al servidor. Intenta de nuevo.',
+                    confirmButtonColor: '#ff6b35',
+                    confirmButtonText: 'Entendido'
+                });
             } finally {
                 registerBtn.disabled = false;
             }

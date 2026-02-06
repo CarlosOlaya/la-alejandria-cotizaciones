@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS empresas (
     nombre VARCHAR(100) NOT NULL,
     nit VARCHAR(20) UNIQUE NOT NULL,
     logo_url VARCHAR(255),
-    color_primario VARCHAR(7) DEFAULT '#ff6b35',
-    color_oscuro VARCHAR(7) DEFAULT '#0a0e14',
+    color_primary VARCHAR(7) DEFAULT '#ff6b35',
+    color_secondary VARCHAR(7) DEFAULT '#4ecdc4',
     incluye_iva BOOLEAN DEFAULT true,
     iva_porcentaje DECIMAL(5,2) DEFAULT 19.00,
     direccion VARCHAR(255),
@@ -123,7 +123,7 @@ CREATE INDEX IF NOT EXISTS idx_quotations_total ON quotations(total);
 -- Validaciones en empresas
 ALTER TABLE empresas 
     ADD CONSTRAINT chk_empresas_iva CHECK (iva_porcentaje >= 0 AND iva_porcentaje <= 100),
-    ADD CONSTRAINT chk_empresas_colores CHECK (color_primario ~ '^#[0-9A-Fa-f]{6}$' AND color_oscuro ~ '^#[0-9A-Fa-f]{6}$');
+    ADD CONSTRAINT chk_empresas_colores CHECK (color_primary ~ '^#[0-9A-Fa-f]{6}$' AND color_secondary ~ '^#[0-9A-Fa-f]{6}$');
 
 -- Validaciones en usuarios
 ALTER TABLE usuarios
