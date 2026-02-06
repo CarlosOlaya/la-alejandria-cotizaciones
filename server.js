@@ -16,7 +16,9 @@ const PORT = process.env.PORT || 5000;
 // Configurar pool de conexión a PostgreSQL
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    ssl: process.env.NODE_ENV === 'production' 
+        ? { rejectUnauthorized: false }
+        : { rejectUnauthorized: false } // Usa SSL incluso en desarrollo con Neon
 });
 
 // Middleware
