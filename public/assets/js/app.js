@@ -238,7 +238,6 @@ class QuotationSystem {
         this.quotations = await this.getAllQuotations();
         this.applyFiltersAndSearch();
         this.renderQuotations();
-        this.setupSearchAndFilterListeners();
     }
 
     applyFiltersAndSearch() {
