@@ -8,13 +8,17 @@ Sistema profesional de generación de cotizaciones para cafeterías con Node.js,
 - ✅ Generación de cotizaciones en PDF
 - ✅ Base de datos PostgreSQL con Neon
 - ✅ API REST con Express.js
-- ✅ Nombres de archivo automáticos (CLIENTE_DD_MM_YY)
-- ✅ Gestión completa (CRUD) de cotizaciones
+- ✅ Navbar modular y componetizado
+- ✅ Transiciones suaves entre páginas
+- ✅ Gestión completa (CRUD) de cotizaciones, clientes y productos
+- ✅ Autocompletado de productos y clientes
+- ✅ Desplegable en Vercel
 
 ## 📋 Requisitos
 
 - Node.js 14+ instalado
 - Cuenta en [Neon](https://neon.tech) para PostgreSQL
+- Cuenta en [Vercel](https://vercel.com) para deploy
 - npm o yarn
 
 ## 🔧 Instalación
@@ -193,7 +197,49 @@ git push heroku main
 
 ### Opción 2: Railway, Render, Vercel
 
-Se puede desplegar en cualquier plataforma que soporte Node.js.
+## 🌐 Despliegue en Vercel
+
+### 1. Preparar el proyecto
+
+```bash
+# Asegurarse de tener vercel.json en la raíz
+git add .
+git commit -m "Add Vercel configuration"
+git push origin main
+```
+
+### 2. Configurar Vercel
+
+1. Ve a [vercel.com](https://vercel.com) e inicia sesión
+2. Click en "Add New Project"
+3. Importa tu repositorio de GitHub
+4. Configura las variables de entorno:
+   - `DATABASE_URL`: Tu connection string de Neon
+   - `NODE_ENV`: production
+
+### 3. Variables de Entorno en Vercel
+
+En el dashboard de Vercel → Settings → Environment Variables:
+
+```
+DATABASE_URL=postgresql://user:password@host.neon.tech/database?sslmode=require
+NODE_ENV=production
+```
+
+### 4. Deploy
+
+Vercel desplegará automáticamente. El proyecto estará en:
+```
+https://tu-proyecto.vercel.app
+```
+
+### Troubleshooting
+
+Si ves errores 404 en `/api/*`:
+1. Verifica que `vercel.json` exista en la raíz
+2. Asegúrate de que `server.js` exporte `module.exports = app`
+3. Revisa que `DATABASE_URL` esté configurada en Vercel
+4. Verifica los logs en Vercel Dashboard → Deployments → View Function Logs
 
 ## 🔒 Seguridad
 
@@ -209,6 +255,7 @@ Se puede desplegar en cualquier plataforma que soporte Node.js.
 - Las fechas se almacenan en formato YYYY-MM-DD
 - Los items se guardan como JSONB para flexibilidad
 - Los totales se almacenan como DECIMAL para precisión
+- Navbar modular: Un solo archivo `navbar.js` para todas las páginas
 
 ## 📧 Soporte
 
