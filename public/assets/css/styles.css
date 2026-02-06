@@ -450,7 +450,7 @@ header {
     background: #ffffff;
     border: 1px solid #D7CCC8;
     border-radius: 10px;
-    padding: 20px;
+    padding: 0px 16px;
     transition: all var(--transition);
 }
 
@@ -484,8 +484,8 @@ header {
 
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
     margin-top: 30px;
 }
 
@@ -493,10 +493,12 @@ header {
     background: #ffffff;
     border: 1px solid #D7CCC8;
     border-radius: 10px;
-    padding: 20px;
+    padding: 0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     animation: fadeIn 0.4s ease;
+    position: relative;
+    cursor: pointer;
 }
 
 @keyframes fadeIn {
@@ -518,57 +520,96 @@ header {
 
 .card-header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 16px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0;
     border-bottom: 1px solid #D7CCC8;
-    padding-bottom: 12px;
-    background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%);
-    color: white;
-    margin: -20px -20px 16px -20px;
-    padding: 14px 20px 12px;
+    background: #8D6E63;
+    padding: 10px 16px;
+    border-radius: 10px 10px 0 0;
 }
 
 .card-number {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    color: #8D6E63;
+    color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
 }
 
 .card-date {
     font-size: 11px;
     color: #999;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.card-date span {
+    font-size: 10px;
 }
 
 .card-client {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #5D4037;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .card-email {
-    font-size: 12px;
+    font-size: 11px;
     color: #999;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
+.card-body {
+    padding: 12px 14px;
+}
+
 .card-items {
-    font-size: 12px;
+    font-size: 10px;
     color: #999;
-    margin-bottom: 12px;
-    padding: 8px 0;
-    border-top: 1px solid #D7CCC8;
-    border-bottom: 1px solid #D7CCC8;
+    margin-bottom: 8px;
+    padding: 6px 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.delete-btn:hover {
+    background: rgba(220, 38, 38, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.delete-btn:active {
+    transform: scale(0.95);
 }
 
 .card-amount {
@@ -1132,27 +1173,11 @@ header {
 
 /* Botones de acciones del Dashboard */
 .dashboard-card-actions {
-    display: flex;
-    gap: 6px;
-    padding: 10px;
-    background-color: #fafafa;
-    border-top: 1px solid #e0e0e0;
+    display: none;
 }
 
 .dashboard-card-actions button {
-    flex: 1;
-    padding: 8px;
-    font-size: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-    font-weight: 600;
-    color: white;
-    background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%);
+    display: none;
 }
 
 .dashboard-card-actions button::before {

@@ -292,25 +292,21 @@ class QuotationSystem {
         };
 
         container.innerHTML = paginatedQuotations.map(q => `
-            <div class="dashboard-card">
+            <div class="dashboard-card" onclick="window.location.href='cotizacion.html?id=${q.id}'">
+                <button class="delete-btn" onclick="event.stopPropagation(); quotationSystem.deleteQuotation(${q.id})" title="Eliminar cotización">
+                    🗑️
+                </button>
                 <div class="card-header">
-                    <div>
-                        <div class="card-number">#${q.quotation_number}</div>
-                        <div class="card-date">${convertDateFromISO(q.date_exp)}</div>
-                    </div>
+                    <div class="card-number">#${q.quotation_number}</div>
                 </div>
                 <div class="card-body">
                     <div class="card-client">${q.client_name || 'Sin cliente'}</div>
                     <div class="card-email">${q.client_email || 'sin@email.com'}</div>
-                    <div class="card-items">
-                        <strong>Válido hasta:</strong> ${convertDateFromISO(q.date_valid)}
+                    <div class="card-date">
+                        <span><strong>Expedida:</strong> ${convertDateFromISO(q.date_exp)}</span>
+                        <span><strong>Válida:</strong> ${convertDateFromISO(q.date_valid)}</span>
                     </div>
                     <div class="card-amount">$ ${q.total.toLocaleString('es-CO', { minimumFractionDigits: 2 })}</div>
-                </div>
-                <div class="card-actions">
-                    <button title="Editar cotización" onclick="window.location.href='cotizacion.html?id=${q.id}'">✏️ Editar</button>
-                    <button title="Imprimir cotización" onclick="window.location.href='cotizacion.html?id=${q.id}&print=true'">🖨️ Imprimir</button>
-                    <button title="Eliminar" class="danger" onclick="quotationSystem.deleteQuotation(${q.id})">🗑️ Eliminar</button>
                 </div>
             </div>
         `).join('');
