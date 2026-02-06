@@ -142,7 +142,12 @@ function initHeaderButtons() {
 
 async function updateProcessInfo() {
     try {
-        const response = await fetch('/api/quotations');
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/quotations', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         
         if (!response.ok) {
             console.error('Error obteniendo datos');

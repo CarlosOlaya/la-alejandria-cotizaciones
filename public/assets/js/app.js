@@ -2,6 +2,15 @@
 
 const API_URL = '/api';
 
+// Helper para obtener headers con token
+function getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+}
+
 class QuotationSystem {
     constructor() {
         this.quotations = [];
@@ -22,7 +31,9 @@ class QuotationSystem {
 
     async getNextQuotationNumber() {
         try {
-            const response = await fetch(`${API_URL}/quotations/next/number`);
+            const response = await fetch(`${API_URL}/quotations/next/number`, {
+                headers: getAuthHeaders()
+            });
             const data = await response.json();
             return data.nextNumber;
         } catch (err) {
@@ -55,9 +66,7 @@ class QuotationSystem {
 
             const response = await fetch(url, {
                 method: method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: getAuthHeaders(),
                 body: JSON.stringify({
                     quotationNumber: parseInt(data.number),
                     dateExp: convertDateToISO(data.date),
@@ -108,7 +117,9 @@ class QuotationSystem {
 
     async loadQuotation(id) {
         try {
-            const response = await fetch(`${API_URL}/quotations/${id}`);
+            const response = await fetch(`${API_URL}/quotations/${id}`, {
+                headers: getAuthHeaders()
+            });
             if (!response.ok) {
                 throw new Error('Cotización no encontrada');
             }
@@ -186,7 +197,8 @@ class QuotationSystem {
 
             try {
                 const response = await fetch(`${API_URL}/quotations/${id}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
                 });
 
                 if (!response.ok) {
@@ -219,7 +231,9 @@ class QuotationSystem {
 
     async getAllQuotations() {
         try {
-            const response = await fetch(`${API_URL}/quotations`);
+            const response = await fetch(`${API_URL}/quotations`, {
+                headers: getAuthHeaders()
+            });
             if (!response.ok) {
                 throw new Error('Error fetching quotations');
             }
