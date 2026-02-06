@@ -7,26 +7,26 @@ const JWT_SECRET = process.env.JWT_SECRET || 'tu_secret_key_cambiar_en_produccio
 module.exports = (pool) => {
     const router = express.Router();
 
-// Middleware para verificar token
-const verificarToken = (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1];
-    
-    if (!token) {
-        return res.status(401).json({ message: 'Token no proporcionado' });
-    }
+    // Middleware para verificar token
+    const verificarToken = (req, res, next) => {
+        const token = req.headers.authorization?.split(' ')[1];
+        
+        if (!token) {
+            return res.status(401).json({ message: 'Token no proporcionado' });
+        }
 
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.usuarioId = decoded.usuarioId;
-        req.empresaId = decoded.empresaId;
-        next();
-    } catch (error) {
-        res.status(401).json({ message: 'Token inválido o expirado' });
-    }
-};
+        try {
+            const decoded = jwt.verify(token, JWT_SECRET);
+            req.usuarioId = decoded.usuarioId;
+            req.empresaId = decoded.empresaId;
+            next();
+        } catch (error) {
+            res.status(401).json({ message: 'Token inválido o expirado' });
+        }
+    };
 
-// REGISTRO
-router.post('/register', async (req, res) => {
+    // REGISTRO
+    router.post('/register', async (req, res) => {
     try {
         const { nombre, email, password } = req.body;
 
