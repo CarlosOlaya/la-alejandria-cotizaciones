@@ -38,7 +38,26 @@ app.use('/api/quotations', quotationsRoutes(pool));
 app.use('/api/clients', clientsRoutes(pool));
 app.use('/api/products', productsRoutes(pool));
 
-// Ruta para servir el frontend (SPA)
+// ========================================
+// RUTAS DE PÁGINAS (SIN EXTENSIÓN .html)
+// ========================================
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+app.get('/empresa', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'empresa.html'));
+});
+
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Ruta para servir el frontend (SPA) - debe ir DESPUÉS de las rutas específicas
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

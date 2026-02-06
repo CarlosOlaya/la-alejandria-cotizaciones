@@ -331,7 +331,7 @@ class QuotationSystem {
         };
 
         container.innerHTML = paginatedQuotations.map(q => `
-            <div class="dashboard-card" onclick="window.location.href='cotizacion.html?id=${q.id}'">
+            <div class="dashboard-card" onclick="window.location.href='/quotation?id=${q.id}'">
                 <button class="delete-btn" onclick="event.stopPropagation(); quotationSystem.deleteQuotation(${q.id})" title="Eliminar cotización">
                     🗑️
                 </button>
@@ -395,7 +395,7 @@ class QuotationSystem {
 const quotationSystem = new QuotationSystem();
 
 function showDashboard() {
-    window.location.href = 'index.html';
+    window.location.href = '/dashboard';
 }
 
 async function generateNewQuotation() {
@@ -557,7 +557,7 @@ async function saveQuotation() {
     
     if (result) {
         // Redirigir al dashboard después de guardar
-        window.location.href = 'index.html';
+        window.location.href = '/dashboard';
     }
 }
 

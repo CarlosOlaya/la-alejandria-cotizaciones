@@ -28,7 +28,7 @@
         // Verificar autenticación antes de cargar
         const token = localStorage.getItem('token');
         if (!token) {
-            window.location.href = 'login.html';
+            window.location.href = '/login';
         }
 
         // Verificar que el token sea válido
@@ -41,7 +41,7 @@
         })
         .catch(err => {
             localStorage.removeItem('token');
-            window.location.href = 'login.html';
+            window.location.href = '/login';
         });
     </script>
 

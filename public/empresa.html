@@ -635,7 +635,7 @@
                 if (response.ok) {
                     document.getElementById('successMessage').classList.add('show');
                     localStorage.setItem('empresaId', data.empresaId);
-                    setTimeout(() => window.location.href = 'index.html', 2000);
+                    setTimeout(() => window.location.href = '/dashboard', 2000);
                 } else {
                     mostrarError(data.message || 'Error al crear la empresa');
                 }

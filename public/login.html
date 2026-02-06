@@ -642,7 +642,7 @@
                     localStorage.setItem('userId', data.userId);
                     
                     // Redirigir al dashboard
-                    window.location.href = 'index.html';
+                    window.location.href = '/dashboard';
                 } else {
                     document.getElementById('loginError').textContent = data.message || 'Error en la autenticación';
                     document.getElementById('loginError').classList.add('show');

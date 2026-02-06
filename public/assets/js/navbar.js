@@ -1,9 +1,9 @@
 // Componente de Navbar reutilizable
 function renderNavbar() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const currentPath = window.location.pathname;
     
     // Configuración del sidebar según la página
-    const sidebarConfig = getSidebarConfig(currentPage);
+    const sidebarConfig = getSidebarConfig(currentPath);
     
     const navbarHTML = `
     <header>
@@ -61,21 +61,15 @@ function renderNavbar() {
     initNavbarEvents();
 }
 
-function getSidebarConfig(currentPage) {
+function getSidebarConfig(currentPath) {
     const configs = {
-        'index.html': {
+        '/': {
             title: '📋 Cotizaciones',
             searchPlaceholder: '🔍 Buscar cotización...',
             searchId: 'search-quotations',
             listId: 'quotations-list'
         },
-        'productos.html': {
-            title: '📦 Productos',
-            searchPlaceholder: '🔍 Buscar producto...',
-            searchId: 'search-products',
-            listId: 'products-list'
-        },
-        'cotizacion.html': {
+        '/dashboard': {
             title: '📋 Cotizaciones',
             searchPlaceholder: '🔍 Buscar cotización...',
             searchId: 'search-quotations',
@@ -83,7 +77,7 @@ function getSidebarConfig(currentPage) {
         }
     };
     
-    return configs[currentPage] || configs['index.html'];
+    return configs[currentPath] || configs['/'];
 }
 
 function initNavbarEvents() {
@@ -92,15 +86,15 @@ function initNavbarEvents() {
     const productsBtn = document.getElementById('products-btn');
 
     if (dashboardBtn) {
-        dashboardBtn.addEventListener('click', () => navigateWithTransition('index.html'));
+        dashboardBtn.addEventListener('click', () => navigateWithTransition('/dashboard'));
     }
 
     if (newQuotationBtn) {
-        newQuotationBtn.addEventListener('click', () => navigateWithTransition('cotizacion.html'));
+        newQuotationBtn.addEventListener('click', () => navigateWithTransition('/cotizacion'));
     }
 
     if (productsBtn) {
-        productsBtn.addEventListener('click', () => navigateWithTransition('productos.html'));
+        productsBtn.addEventListener('click', () => navigateWithTransition('/productos'));
     }
 
     highlightActiveButton();
@@ -112,7 +106,7 @@ function navigateWithTransition(url) {
 }
 
 function highlightActiveButton() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const currentPath = window.location.pathname;
     const buttons = {
         'index.html': document.getElementById('dashboard-btn'),
         'cotizacion.html': document.getElementById('new-quotation-btn'),
