@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ========================================
 // RUTAS API
 // ========================================
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes(pool));
 app.use('/api/quotations', quotationsRoutes(pool));
 app.use('/api/clients', clientsRoutes(pool));
 app.use('/api/products', productsRoutes(pool));

@@ -1,10 +1,11 @@
 const express = require('express');
-const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const pool = require('../db');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'tu_secret_key_cambiar_en_produccion';
+
+module.exports = (pool) => {
+    const router = express.Router();
 
 // Middleware para verificar token
 const verificarToken = (req, res, next) => {
@@ -213,4 +214,5 @@ router.post('/verificar', verificarToken, async (req, res) => {
     }
 });
 
-module.exports = router;
+    return router;
+};
