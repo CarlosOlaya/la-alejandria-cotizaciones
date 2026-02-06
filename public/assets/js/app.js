@@ -6,6 +6,10 @@ class QuotationSystem {
     constructor() {
         this.quotations = [];
         this.currentQuotation = null;
+        this.filteredQuotations = [];
+        this.searchTerm = '';
+        this.currentPage = 1;
+        this.itemsPerPage = 6; // 6 tarjetas por página
     }
 
     async init() {
@@ -231,47 +235,124 @@ class QuotationSystem {
         const container = document.getElementById('dashboardItems');
         if (!container) return;
 
-        const quotations = await this.getAllQuotations();
+        this.quotations = await this.getAllQuotations();
+        this.applyFiltersAndSearch();
+        this.renderQuotations();
+        this.setupSearchAndFilterListeners();
+    }
 
-        if (quotations.length === 0) {
-            container.innerHTML = '<p style="color: #ccc; grid-column: 1/-1; text-align: center;">No hay cotizaciones guardadas</p>';
+    applyFiltersAndSearch() {
+        let filtered = [...this.quotations];
+
+        // Aplicar búsqueda
+        if (this.searchTerm.trim()) {
+            const search = this.searchTerm.toLowerCase();
+            filtered = filtered.filter(q => {
+                return (
+                    q.client_name.toLowerCase().includes(search) ||
+                    q.quotation_number.toString().includes(search) ||
+                    (q.client_email && q.client_email.toLowerCase().includes(search)) ||
+                    (q.client_phone && q.client_phone.includes(search))
+                );
+            });
+        }
+
+        this.filteredQuotations = filtered;
+        this.currentPage = 1; // Reiniciar a página 1 cuando se busca
+    }
+
+    getPaginatedQuotations() {
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+        return this.filteredQuotations.slice(start, end);
+    }
+
+    getTotalPages() {
+        return Math.ceil(this.filteredQuotations.length / this.itemsPerPage);
+    }
+
+    renderQuotations() {
+        const container = document.getElementById('dashboardItems');
+        if (!container) return;
+
+        const paginatedQuotations = this.getPaginatedQuotations();
+
+        if (this.filteredQuotations.length === 0) {
+            container.innerHTML = '<p style="color: var(--color-text-secondary); grid-column: 1/-1; text-align: center; padding: 40px 20px;">No hay cotizaciones que coincidan con tu búsqueda</p>';
+            this.updatePaginationControls();
             return;
         }
 
         // Convertir fechas de YYYY-MM-DD a DD/MM/YY
         const convertDateFromISO = (dateStr) => {
             if (!dateStr) return '';
-            // Manejar formato con tiempo (2026-02-05T00:00:00.000Z) o sin tiempo (2026-02-05)
             const datePart = dateStr.split('T')[0];
             const [year, month, day] = datePart.split('-');
             const shortYear = year.slice(-2);
             return `${day}/${month}/${shortYear}`;
         };
 
-        container.innerHTML = quotations.map(q => `
+        container.innerHTML = paginatedQuotations.map(q => `
             <div class="dashboard-card">
                 <div class="card-header">
-                    <div class="card-header-content">
-                        <h4>${q.client_name || 'Sin cliente'}</h4>
+                    <div>
+                        <div class="card-number">#${q.quotation_number}</div>
+                        <div class="card-date">${convertDateFromISO(q.date_exp)}</div>
                     </div>
-                    <button class="btn-delete-card" title="Eliminar cotización" onclick="quotationSystem.deleteQuotation(${q.id})">🗑️</button>
                 </div>
                 <div class="card-body">
-                    <div class="card-meta">
-                        <small><strong>#${q.quotation_number}</strong></small>
-                        <small>Fecha: ${convertDateFromISO(q.date_exp)}</small>
-                        <small>Válido hasta: ${convertDateFromISO(q.date_valid)}</small>
+                    <div class="card-client">${q.client_name || 'Sin cliente'}</div>
+                    <div class="card-email">${q.client_email || 'sin@email.com'}</div>
+                    <div class="card-items">
+                        <strong>Válido hasta:</strong> ${convertDateFromISO(q.date_valid)}
                     </div>
+                    <div class="card-amount">$ ${q.total.toLocaleString('es-CO', { minimumFractionDigits: 2 })}</div>
                 </div>
-                <div class="card-footer">
-                    <p class="total-amount">$ ${q.total.toLocaleString('es-CO', { minimumFractionDigits: 0 })}</p>
-                </div>
-                <div class="dashboard-card-actions">
+                <div class="card-actions">
                     <button title="Editar cotización" onclick="window.location.href='cotizacion.html?id=${q.id}'">✏️ Editar</button>
                     <button title="Imprimir cotización" onclick="window.location.href='cotizacion.html?id=${q.id}&print=true'">🖨️ Imprimir</button>
+                    <button title="Eliminar" class="danger" onclick="quotationSystem.deleteQuotation(${q.id})">🗑️ Eliminar</button>
                 </div>
             </div>
         `).join('');
+
+        this.updatePaginationControls();
+    }
+
+    updatePaginationControls() {
+        const totalPages = this.getTotalPages();
+        const pageInfo = document.getElementById('pageInfo');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        if (pageInfo) {
+            pageInfo.textContent = `Página ${this.currentPage} de ${totalPages}`;
+        }
+
+        if (prevBtn) {
+            prevBtn.disabled = this.currentPage === 1;
+        }
+
+        if (nextBtn) {
+            nextBtn.disabled = this.currentPage === totalPages || totalPages === 0;
+        }
+    }
+
+    previousPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.renderQuotations();
+            window.scrollTo(0, 0);
+        }
+    }
+
+    nextPage() {
+        const totalPages = this.getTotalPages();
+        if (this.currentPage < totalPages) {
+            this.currentPage++;
+            this.renderQuotations();
+            window.scrollTo(0, 0);
+        }
     }
 }
 
@@ -326,13 +407,23 @@ function addItemRow(quantity = '', description = '', unit = '', discountUnit = '
     row.id = 'row-' + rowIndex;
     row.innerHTML = `
         <td class="text-center"><input type="number" class="item-quantity" value="${quantity}" min="0" onchange="calculateRowTotal(${rowIndex})" step="0.01"></td>
-        <td><input type="text" class="item-description" value="${description}" placeholder="Descripción del producto"></td>
+        <td>
+            <div class="autocomplete-wrapper" style="position: relative;">
+                <input type="text" class="item-description autocomplete-input" value="${description}" placeholder="Escriba producto o seleccione" data-row-index="${rowIndex}">
+                <div class="autocomplete-list" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; display: none; max-height: 150px; overflow-y: auto; z-index: 100;"></div>
+            </div>
+        </td>
         <td class="text-right"><input type="number" class="item-unit" value="${unit}" min="0" onchange="calculateRowTotal(${rowIndex})" placeholder="0" step="0.01"></td>
         <td class="text-right"><input type="number" class="item-discount" value="${discountUnit}" min="0" onchange="calculateRowTotal(${rowIndex})" placeholder="0" step="0.01"></td>
         <td class="text-right"><input type="text" class="item-total" value="${total}" readonly style="background-color: #efebe9;"></td>
         <td class="text-center"><button class="delete-row" onclick="deleteItemRow(${rowIndex})">Eliminar</button></td>
     `;
     tbody.appendChild(row);
+    
+    // Inicializar autocomplete para este item
+    const descriptionInput = row.querySelector('.item-description');
+    const autocompleteList = row.querySelector('.autocomplete-list');
+    initProductAutocomplete(descriptionInput, autocompleteList, rowIndex);
 }
 
 function calculateRowTotal(rowIndex) {
@@ -354,6 +445,15 @@ function deleteItemRow(rowIndex) {
 }
 
 function calculateTotals() {
+    // Validar que los elementos existan antes de acceder
+    const subtotalInput = document.getElementById('subtotal');
+    const discountInput = document.getElementById('discount');
+    const totalInput = document.getElementById('total');
+    
+    if (!subtotalInput || !discountInput || !totalInput) {
+        return; // Salir si los elementos no existen
+    }
+
     const rows = document.querySelectorAll('#itemsTableBody tr');
     let subtotal = 0;
     let discountTotal = 0;
@@ -370,9 +470,9 @@ function calculateTotals() {
 
     const total = subtotal - discountTotal;
 
-    document.getElementById('subtotal').value = '$ ' + subtotal.toLocaleString('es-CO', { minimumFractionDigits: 0 });
-    document.getElementById('discount').value = '$ ' + discountTotal.toLocaleString('es-CO', { minimumFractionDigits: 0 });
-    document.getElementById('total').value = '$ ' + total.toLocaleString('es-CO', { minimumFractionDigits: 0 });
+    subtotalInput.value = '$ ' + subtotal.toLocaleString('es-CO', { minimumFractionDigits: 0 });
+    discountInput.value = '$ ' + discountTotal.toLocaleString('es-CO', { minimumFractionDigits: 0 });
+    totalInput.value = '$ ' + total.toLocaleString('es-CO', { minimumFractionDigits: 0 });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -427,7 +527,88 @@ async function saveQuotation() {
     }
 }
 
-// Inicializar cálculos cuando la página cargue
-window.addEventListener('load', () => {
-    calculateTotals();
+// Inicializar cálculos cuando la página cargue completamente
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        calculateTotals();
+    }, 100);
 });
+
+// Función para autocomplete de productos
+function initProductAutocomplete(inputElement, listElement, rowIndex) {
+    let debounceTimer;
+    
+    inputElement.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        const query = e.target.value.trim();
+        
+        if (query.length < 1) {
+            listElement.style.display = 'none';
+            return;
+        }
+        
+        debounceTimer = setTimeout(async () => {
+            try {
+                const response = await fetch(`/api/products/search/${encodeURIComponent(query)}`);
+                const products = await response.json();
+                
+                if (products.length === 0) {
+                    listElement.style.display = 'none';
+                    return;
+                }
+                
+                listElement.innerHTML = products.map(product => `
+                    <div class="autocomplete-item" style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;" data-product='${JSON.stringify(product)}'>
+                        <strong>${product.name}</strong><br>
+                        <small style="color: #666;">Precio: <span class="price" style="color: #4CAF50;">$ ${product.price.toLocaleString('es-CO', {minimumFractionDigits: 2})}</span></small>
+                    </div>
+                `).join('');
+                
+                listElement.style.display = 'block';
+                
+                // Agregar listeners a los items
+                listElement.querySelectorAll('.autocomplete-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const product = JSON.parse(item.getAttribute('data-product'));
+                        selectProductForRow(rowIndex, product);
+                    });
+                });
+            } catch (error) {
+                console.error('Error al buscar productos:', error);
+            }
+        }, 300);
+    });
+    
+    // Cerrar dropdown al perder foco
+    inputElement.addEventListener('blur', () => {
+        setTimeout(() => {
+            listElement.style.display = 'none';
+        }, 200);
+    });
+    
+    // Abrir dropdown al hacer focus si hay texto
+    inputElement.addEventListener('focus', () => {
+        if (inputElement.value.trim().length > 0 && listElement.innerHTML) {
+            listElement.style.display = 'block';
+        }
+    });
+}
+
+// Función para seleccionar un producto y rellenar el precio
+function selectProductForRow(rowIndex, product) {
+    const row = document.getElementById('row-' + rowIndex);
+    const descriptionInput = row.querySelector('.item-description');
+    const unitInput = row.querySelector('.item-unit');
+    const autocompleteList = row.querySelector('.autocomplete-list');
+    
+    // Rellenar descripción y precio
+    descriptionInput.value = product.name;
+    unitInput.value = product.price;
+    
+    // Cerrar dropdown
+    autocompleteList.style.display = 'none';
+    
+    // Recalcular el total de la fila
+    calculateRowTotal(rowIndex);
+}
+

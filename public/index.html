@@ -3,51 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cotización La Alejandría - Dashboard</title>
+    <title>Cotizaciones · La Alejandría</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Sistema de cotizaciones para café especial La Alejandría">
+    <meta name="theme-color" content="#8D6E63">
+    
+    <!-- Favicon -->
     <link rel="icon" href="icon.png" type="image/png">
-    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Open+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Sweet Alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-<body>
+<body style="visibility: hidden;">
+    <script src="assets/js/navbar.js"></script>
+    <script>
+        document.body.style.visibility = 'visible';
+        requestAnimationFrame(() => document.body.classList.add('page-loaded'));
+    </script>
 
-<div class="main-content">
-<div class="container">
-    <div class="header">
-        <div class="logo-area">
-            <img src="icon.png" alt="Logo La Alejandría">
-            <div>
-                <h1>La Alejandría</h1>
-                <p>Café Especial</p>
+    <div class="container">
+        <!-- Contenedor de Alertas -->
+        <div id="alerts-container"></div>
+
+        <!-- Información del Proceso -->
+        <div class="process-info" id="process-info">
+            <div class="info-item">
+                <div class="info-label">Total Cotizaciones</div>
+                <div class="info-value" id="total-quotations">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Mes Actual</div>
+                <div class="info-value" id="current-month">---</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Monto Total</div>
+                <div class="info-value" id="total-amount">$ 0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Promedio por Cotización</div>
+                <div class="info-value" id="average-amount">$ 0</div>
             </div>
         </div>
-        <div class="company-data">
-            <strong>NIT: 1104869101-4</strong>
-            WhatsApp: 321 5039258
+
+        <!-- ================================================================
+             BUSCADOR Y FILTROS
+             ================================================================ -->
+        <div class="search-and-filters">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar por cliente, número o email..." class="search-input">
+            </div>
         </div>
-    </div>
 
-    <div class="dashboard-welcome">
-        <h2>Gestión de Cotizaciones</h2>
-        <p>Administra tus cotizaciones de forma rápida y eficiente</p>
-        <a href="cotizacion.html" class="btn-gradient-border">+ Nueva Cotización</a>
-    </div>
+        <!-- Paginación -->
+        <div class="pagination-controls">
+            <button id="prevBtn" class="pagination-btn" onclick="quotationSystem.previousPage()">← Anterior</button>
+            <span id="pageInfo" class="page-info">Página 1 de 1</span>
+            <button id="nextBtn" class="pagination-btn" onclick="quotationSystem.nextPage()">Siguiente →</button>
+        </div>
 
-    <div class="dashboard-section">
-        <h3>Cotizaciones Activas</h3>
+        <!-- ================================================================
+             GRID DE COTIZACIONES
+             ================================================================ -->
         <div id="dashboardItems" class="dashboard-grid">
             <p style="color: #ccc; grid-column: 1/-1; text-align: center;">Cargando cotizaciones...</p>
         </div>
     </div>
-</div>
-</div>
 
-<script src="assets/js/app.js"></script>
-<script>
-    // Inicializar dashboard
-    document.addEventListener('DOMContentLoaded', () => {
-        quotationSystem.refreshDashboard();
-    });
-</script>
-
+    <!-- ====================================================================
+         JAVASCRIPT - MÓDULOS
+         ==================================================================== -->
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            quotationSystem.refreshDashboard();
+            initUI();
+            updateProcessInfo();
+        });
+    </script>
 </body>
 </html>

@@ -5,17 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cotización La Alejandría</title>
     <link rel="icon" href="icon.png" type="image/png">
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Open+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-<body>
+<body style="visibility: hidden;">
+    <script src="assets/js/navbar.js"></script>
+    <script>
+        document.body.style.visibility = 'visible';
+        requestAnimationFrame(() => document.body.classList.add('page-loaded'));
+    </script>
 
 <div class="main-content">
-<div class="back-button-wrapper">
-    <a href="index.html" class="btn btn-back">← Volver</a>
-</div>
-
-<div class="container">
+<div class="container" id="quotation-container">
     <div class="header">
         <div class="logo-area">
             <img src="icon.png" alt="Logo La Alejandría">
@@ -44,7 +48,12 @@
         <table>
             <tr>
                 <td class="label">CLIENTE:</td>
-                <td><input type="text" id="clientName" placeholder="Nombre del cliente"></td>
+                <td>
+                    <div class="autocomplete-wrapper">
+                        <input type="text" id="clientName" class="autocomplete-input" placeholder="Escriba o seleccione cliente">
+                        <div id="clientAutocompleteList" class="autocomplete-list"></div>
+                    </div>
+                </td>
                 <td class="label">CC/NIT:</td>
                 <td><input type="text" id="clientCCNIT" placeholder="CC o NIT"></td>
             </tr>
@@ -108,6 +117,7 @@
     <div class="actions-footer">
         <button class="btn btn-success btn-save" onclick="saveQuotation()">💾 Guardar</button>
         <button class="btn btn-primary btn-print" onclick="printQuotation()">🖨️ Imprimir</button>
+    </div>
     </div>
 </div>
 </div>
@@ -175,5 +185,55 @@
     });
 </script>
 
+<script src="assets/js/autocomplete.js"></script>
+<script>
+    // Inicializar autocomplete de clientes
+    const clientAutocomplete = new AutocompleteManager(
+        '#clientName',
+        '#clientAutocompleteList',
+        '/api/clients',
+        (clientData) => {
+            document.getElementById('clientCCNIT').value = clientData.cc_nit || '';
+            document.getElementById('clientAddress').value = clientData.address || '';
+            document.getElementById('clientPhone').value = clientData.phone || '';
+            document.getElementById('clientEmail').value = clientData.email || '';
+        }
+    );
+</script>
+
+<script src="assets/js/ui.js"></script>
+<script>
+    // Inicializar UI (hamburger, sidebar, buttons)
+    document.addEventListener('DOMContentLoaded', () => {
+        initUI();
+    });
+    
+    // Redefine button handlers for cotization page
+    function initHeaderButtons() {
+        const dashboardBtn = document.getElementById('dashboard-btn');
+        const productsBtn = document.getElementById('products-btn');
+        
+        if (dashboardBtn) {
+            dashboardBtn.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+        }
+        
+        if (productsBtn) {
+            productsBtn.addEventListener('click', () => {
+                window.location.href = 'productos.html';
+            });
+        }
+    }
+    
+    // Override the ui.js initUI to include header buttons init
+    const originalInitUI = initUI;
+    initUI = function() {
+        originalInitUI();
+        initHeaderButtons();
+        loadQuotationsToSidebar();
+        initSidebarSearch();
+    };
+</script>
 </body>
 </html>

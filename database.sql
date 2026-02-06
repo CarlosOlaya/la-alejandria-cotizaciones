@@ -33,3 +33,33 @@ CREATE TABLE IF NOT EXISTS quotations_audit (
 
 -- Crear índice en tabla de auditoría
 CREATE INDEX IF NOT EXISTS idx_audit_quotation ON quotations_audit(quotation_id);
+
+-- ========================================
+-- TABLA DE CLIENTES
+-- ========================================
+CREATE TABLE IF NOT EXISTS clients (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    cc_nit VARCHAR(50),
+    address VARCHAR(500),
+    phone VARCHAR(20),
+    email VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_client_name ON clients(name);
+
+-- ========================================
+-- TABLA DE PRODUCTOS
+-- ========================================
+CREATE TABLE IF NOT EXISTS products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    price DECIMAL(12, 2) NOT NULL DEFAULT 0,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_product_name ON products(name);

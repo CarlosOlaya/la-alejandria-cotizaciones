@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos · La Alejandría</title>
+    <meta name="description" content="Gestión de productos para café especial La Alejandría">
+    <meta name="theme-color" content="#8D6E63">
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Open+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body style="visibility: hidden;">
+    <script src="assets/js/navbar.js"></script>
+    <script>
+        document.body.style.visibility = 'visible';
+        requestAnimationFrame(() => document.body.classList.add('page-loaded'));
+    </script>
+
+    <div class="container">
+        <!-- Contenedor de Alertas -->
+        <div id="alerts-container"></div>
+
+        <h2 style="color: #6D4C41; margin-bottom: 10px;">📦 Gestión de Productos</h2>
+        <p style="color: #999; margin-bottom: 30px;">Administra tu catálogo de productos y precios</p>
+
+        <div class="product-form-card">
+            <form id="productForm" onsubmit="saveProduct(event)">
+                <input type="hidden" id="productId">
+                ñ
+                <div class="form-group">
+                    <label for="productName">Nombre del Producto *</label>
+                    <input type="text" id="productName" required placeholder="Ej: Café Arábica Premium">
+                </div>
+                
+                <div class="form-group">
+                    <label for="productPrice">Precio (COP) *</label>
+                    <input type="number" id="productPrice" required placeholder="0" step="0.01" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="productDescription">Descripción</label>
+                    <textarea id="productDescription" placeholder="Descripción del producto" rows="3"></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-success">💾 Guardar</button>
+                    <button type="button" class="btn btn-danger" onclick="resetProductForm()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <h2 style="color: #6D4C41; margin-top: 40px; margin-bottom: 20px;">Productos Registrados</h2>
+        <div id="productsContainer" class="products-list">
+            <p style="color: #999; text-align: center; padding: 20px;">Cargando productos...</p>
+        </div>
+    </div>
+
+    <!-- ====================================================================
+         JAVASCRIPT
+         ==================================================================== -->
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/products.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            productManager.refreshProducts();
+            initUI();
+            
+            // Botones del header para productos
+            const dashboardBtn = document.getElementById('dashboard-btn');
+            if (dashboardBtn) {
+                dashboardBtn.addEventListener('click', () => {
+                    window.location.href = 'index.html';
+                });
+            }
+            
+            // Botón crear producto
+            const newQuotationBtn = document.getElementById('new-quotation-btn');
+            if (newQuotationBtn) {
+                newQuotationBtn.addEventListener('click', () => {
+                    window.location.href = 'cotizacion.html';
+                });
+            }
+            
+            // Búsqueda en productos
+            const searchInput = document.getElementById('search-products');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const items = document.querySelectorAll('.product-item');
+                    
+                    items.forEach(item => {
+                        const name = item.querySelector('.product-name')?.textContent.toLowerCase() || '';
+                        const matches = name.includes(searchTerm);
+                        item.style.display = matches ? 'block' : 'none';
+                    });
+                });
+            }
+            
+            // Recargar lista en sidebar
+            async function loadProductsToSidebar() {
+                const productsList = document.getElementById('products-list');
+                if (!productsList) return;
+                
+                try {
+                    const response = await fetch('/api/products');
+                    const data = await response.json();
+                    
+                    if (!data.success || !data.products.length) {
+                        productsList.innerHTML = '<p style="padding: 1rem; color: #999;">No hay productos</p>';
+                        return;
+                    }
+                    
+                    const sortedProducts = data.products.sort((a, b) => 
+                        new Date(b.created_at) - new Date(a.created_at)
+                    ).slice(0, 15);
+                    
+                    productsList.innerHTML = sortedProducts.map(p => `
+                        <div class="quotation-item product-item" data-id="${p.id}">
+                            <div class="quotation-title">
+                                <strong class="product-name">${p.name}</strong>
+                            </div>
+                            <div class="quotation-amount">$ ${parseFloat(p.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</div>
+                            <div class="quotation-actions">
+                                <button class="action-btn" onclick="editProduct(${p.id})" title="Editar">✏️</button>
+                                <button class="action-btn delete" onclick="deleteProduct(${p.id})" title="Eliminar">🗑️</button>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                } catch (error) {
+                    console.error('Error cargando productos:', error);
+                    productsList.innerHTML = '<p style="padding: 1rem; color: #f56565;">Error al cargar productos</p>';
+                }
+            }
+            
+            loadProductsToSidebar();
+            setInterval(loadProductsToSidebar, 30000);
+        });
+    </script>
+</body>
+</html>

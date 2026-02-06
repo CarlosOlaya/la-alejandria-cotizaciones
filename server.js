@@ -7,6 +7,8 @@ const { Pool } = require('pg');
 
 // Importar rutas
 const quotationsRoutes = require('./routes/quotations');
+const clientsRoutes = require('./routes/clients');
+const productsRoutes = require('./routes/products');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -29,6 +31,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // RUTAS API
 // ========================================
 app.use('/api/quotations', quotationsRoutes(pool));
+app.use('/api/clients', clientsRoutes(pool));
+app.use('/api/products', productsRoutes(pool));
 
 // Ruta para servir el frontend (SPA)
 app.get('*', (req, res) => {
