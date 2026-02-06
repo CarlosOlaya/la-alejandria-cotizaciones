@@ -53,8 +53,8 @@ router.post('/register', async (req, res) => {
 
         // Crear empresa inicial
         const empresaResult = await pool.query(
-            'INSERT INTO empresas (nombre, nit, color_primario, color_oscuro) VALUES ($1, $2, $3, $4) RETURNING id',
-            [`Empresa de ${nombre}`, 'POR_DEFINIR', '#ff6b35', '#0a0e14']
+            'INSERT INTO empresas (nombre, nit, color_primary, color_secondary) VALUES ($1, $2, $3, $4) RETURNING id',
+            [`Empresa de ${nombre}`, 'POR_DEFINIR', '#ff6b35', '#4ecdc4']
         );
 
         const empresaId = empresaResult.rows[0].id;
@@ -125,8 +125,8 @@ router.post('/empresas/crear', verificarToken, async (req, res) => {
             nombre,
             nit,
             logo_url,
-            color_primario,
-            color_oscuro,
+            color_primary,
+            color_secondary,
             incluye_iva,
             iva_porcentaje,
             direccion,
@@ -145,8 +145,8 @@ router.post('/empresas/crear', verificarToken, async (req, res) => {
                 nombre = $1,
                 nit = $2,
                 logo_url = $3,
-                color_primario = $4,
-                color_oscuro = $5,
+                color_primary = $4,
+                color_secondary = $5,
                 incluye_iva = $6,
                 iva_porcentaje = $7,
                 direccion = $8,
@@ -155,7 +155,7 @@ router.post('/empresas/crear', verificarToken, async (req, res) => {
                 descripcion = $11
             WHERE id = $12
             RETURNING id`,
-            [nombre, nit, logo_url, color_primario, color_oscuro, incluye_iva, iva_porcentaje, direccion, telefono, email_contacto, descripcion, req.empresaId]
+            [nombre, nit, logo_url, color_primary, color_secondary, incluye_iva, iva_porcentaje, direccion, telefono, email_contacto, descripcion, req.empresaId]
         );
 
         res.json({ message: 'Empresa actualizada', empresaId: req.empresaId });

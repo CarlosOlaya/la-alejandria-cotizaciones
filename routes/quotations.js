@@ -4,6 +4,24 @@ const { verificarToken } = require('../middleware/auth');
 
 // Inyectar pool desde el servidor
 module.exports = (pool) => {
+    // GET próximo número de cotización (DEBE IR ANTES DE /:id)
+    router.get('/next/number', verificarToken, async (req, res) => {
+        try {
+            const empresaId = req.empresaId;
+            const result = await pool.query(
+                'SELECT MAX(quotation_number) as max_number FROM quotations WHERE empresa_id = $1',
+                [empresaId]
+            );
+            const maxNumber = result.rows[0].max_number || 1000;
+            const nextNumber = maxNumber + 1;
+            
+            res.json({ nextNumber });
+        } catch (err) {
+            console.error('Error getting next quotation number:', err);
+            res.status(500).json({ error: 'Error getting next quotation number' });
+        }
+    });
+
     // GET todas las cotizaciones (filtradas por empresa)
     router.get('/', verificarToken, async (req, res) => {
         try {
@@ -37,24 +55,6 @@ module.exports = (pool) => {
         } catch (err) {
             console.error('Error fetching quotation:', err);
             res.status(500).json({ error: 'Error fetching quotation' });
-        }
-    });
-
-    // GET próximo número de cotización (por empresa)
-    router.get('/next/number', verificarToken, async (req, res) => {
-        try {
-            const empresaId = req.empresaId;
-            const result = await pool.query(
-                'SELECT MAX(quotation_number) as max_number FROM quotations WHERE empresa_id = $1',
-                [empresaId]
-            );
-            const maxNumber = result.rows[0].max_number || 1000;
-            const nextNumber = maxNumber + 1;
-            
-            res.json({ nextNumber });
-        } catch (err) {
-            console.error('Error getting next quotation number:', err);
-            res.status(500).json({ error: 'Error getting next quotation number' });
         }
     });
 
