@@ -20,7 +20,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0a0e14 0%, #141921 50%, #1a1f2e 100%);
+            background: linear-gradient(135deg, #040C0E 0%, #0d1117 50%, #132226 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -200,7 +200,7 @@
         }
 
         .password-toggle:hover {
-            color: #ff6b35;
+            color: #BE9063;
         }
 
         .password-group input {
@@ -233,7 +233,7 @@
 
         input:focus {
             outline: none;
-            border-color: #ff6b35;
+            border-color: #BE9063;
             background: rgba(255, 107, 53, 0.05);
             box-shadow: 0 0 15px rgba(255, 107, 53, 0.2);
         }
@@ -252,7 +252,7 @@
         .btn-login {
             width: 100%;
             padding: 1rem;
-            background: linear-gradient(135deg, #ff6b35, #ff8a5b);
+            background: linear-gradient(135deg, #BE9063, #A4978E);
             border: none;
             border-radius: 10px;
             color: white;
@@ -321,7 +321,7 @@
         }
 
         .switch-auth a {
-            color: #ff6b35;
+            color: #BE9063;
             text-decoration: none;
             font-weight: 600;
             cursor: pointer;
@@ -349,7 +349,7 @@
             width: 40px;
             height: 40px;
             border: 3px solid rgba(255, 107, 53, 0.2);
-            border-top-color: #ff6b35;
+            border-top-color: #BE9063;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -430,12 +430,12 @@
             <svg class="brand-logo" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#0a0e14"/>
-                        <stop offset="100%" stop-color="#141921"/>
+                        <stop offset="0%" stop-color="#040C0E"/>
+                        <stop offset="100%" stop-color="#0d1117"/>
                     </linearGradient>
                     <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#ff6b35"/>
-                        <stop offset="100%" stop-color="#4ecdc4"/>
+                        <stop offset="0%" stop-color="#BE9063"/>
+                        <stop offset="100%" stop-color="#525B56"/>
                     </linearGradient>
                 </defs>
                 <rect width="512" height="512" rx="96" fill="url(#bg)"/>
@@ -618,7 +618,7 @@
                     icon: 'warning',
                     title: 'Campo Requerido',
                     text: 'Por favor ingresa tu email',
-                    confirmButtonColor: '#ff6b35',
+                    confirmButtonColor: '#BE9063',
                     confirmButtonText: 'Entendido'
                 });
                 return;
@@ -629,7 +629,7 @@
                     icon: 'warning',
                     title: 'Campo Requerido',
                     text: 'Por favor ingresa tu contraseña',
-                    confirmButtonColor: '#ff6b35',
+                    confirmButtonColor: '#BE9063',
                     confirmButtonText: 'Entendido'
                 });
                 return;
@@ -659,7 +659,7 @@
                         text: 'Iniciando sesión...',
                         timer: 1500,
                         showConfirmButton: false,
-                        confirmButtonColor: '#ff6b35'
+                        confirmButtonColor: '#BE9063'
                     }).then(() => {
                         window.location.href = '/dashboard';
                     });
@@ -668,7 +668,7 @@
                         icon: 'error',
                         title: 'Error de Autenticación',
                         text: data.message || 'Email o contraseña incorrectos',
-                        confirmButtonColor: '#ff6b35',
+                        confirmButtonColor: '#BE9063',
                         confirmButtonText: 'Intentar de Nuevo'
                     });
                 }
@@ -678,7 +678,7 @@
                     icon: 'error',
                     title: 'Error de Conexión',
                     text: 'No se pudo conectar al servidor. Intenta de nuevo.',
-                    confirmButtonColor: '#ff6b35',
+                    confirmButtonColor: '#BE9063',
                     confirmButtonText: 'Entendido'
                 });
             } finally {
@@ -702,7 +702,7 @@
                     icon: 'warning',
                     title: 'Campo Requerido',
                     text: 'Por favor ingresa tu nombre completo',
-                    confirmButtonColor: '#ff6b35',
+                    confirmButtonColor: '#BE9063',
                     confirmButtonText: 'Entendido'
                 });
                 return;
@@ -713,7 +713,7 @@
                     icon: 'warning',
                     title: 'Campo Requerido',
                     text: 'Por favor ingresa tu email',
-                    confirmButtonColor: '#ff6b35',
+                    confirmButtonColor: '#BE9063',
                     confirmButtonText: 'Entendido'
                 });
                 return;
@@ -724,7 +724,7 @@
                     icon: 'warning',
                     title: 'Contraseña Débil',
                     text: 'La contraseña debe tener al menos 6 caracteres',
-                    confirmButtonColor: '#ff6b35',
+                    confirmButtonColor: '#BE9063',
                     confirmButtonText: 'Entendido'
                 });
                 return;
@@ -735,7 +735,7 @@
                     icon: 'warning',
                     title: 'Contraseñas No Coinciden',
                     text: 'Por favor verifica que las contraseñas sean iguales',
-                    confirmButtonColor: '#ff6b35',
+                    confirmButtonColor: '#BE9063',
                     confirmButtonText: 'Entendido'
                 });
                 return;
@@ -757,7 +757,7 @@
                         icon: 'success',
                         title: '¡Registro Exitoso!',
                         text: 'Tu cuenta ha sido creada correctamente. Por favor inicia sesión.',
-                        confirmButtonColor: '#ff6b35',
+                        confirmButtonColor: '#BE9063',
                         confirmButtonText: 'Continuar'
                     }).then(() => {
                         switchToLogin();
@@ -768,7 +768,7 @@
                         icon: 'error',
                         title: 'Error en el Registro',
                         text: data.message || 'Ocurrió un error al registrarse',
-                        confirmButtonColor: '#ff6b35',
+                        confirmButtonColor: '#BE9063',
                         confirmButtonText: 'Intentar de Nuevo'
                     });
                 }
@@ -778,7 +778,7 @@
                     icon: 'error',
                     title: 'Error de Conexión',
                     text: 'No se pudo conectar al servidor. Intenta de nuevo.',
-                    confirmButtonColor: '#ff6b35',
+                    confirmButtonColor: '#BE9063',
                     confirmButtonText: 'Entendido'
                 });
             } finally {
