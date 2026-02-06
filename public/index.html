@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body style="visibility: hidden;">
+    <script src="assets/js/navbar.js"></script>
+    <script src="assets/js/app.js"></script>
     <script>
         // Verificar autenticación antes de cargar
         const token = localStorage.getItem('token');
@@ -31,31 +33,38 @@
             window.location.href = '/login';
         }
 
-        // Verificar que el token sea válido
-        fetch('/api/auth/verificar', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        })
-        .then(r => {
-            if (!r.ok) throw new Error('Token inválido');
-            return r.json();
-        })
-        .catch(err => {
-            localStorage.removeItem('token');
-            window.location.href = '/login';
-        });
+        // Verificar que el token sea válido (async)
+        (async () => {
+            try {
+                const response = await fetch('/api/auth/verificar', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Token inválido');
+                }
+                
+                const data = await response.json();
+                localStorage.setItem('userId', data.usuario.id);
+                localStorage.setItem('empresaId', data.empresa.id);
+                
+                // Mostrar contenido
+                document.body.style.visibility = 'visible';
+                
+                // Cargar colores de empresa
+                await loadEmpresaColors();
+                
+            } catch (err) {
+                console.error('Error de autenticación:', err);
+                localStorage.removeItem('token');
+                localStorage.removeItem('userId');
+                localStorage.removeItem('empresaId');
+                window.location.href = '/login';
+            }
+        })();
     </script>
-
-    <script src="assets/js/navbar.js"></script>
     <script>
-        document.body.style.visibility = 'visible';
         requestAnimationFrame(() => document.body.classList.add('page-loaded'));
-    </script>
-
-    <!-- Cargar colores de empresa antes que app.js -->
-    <script src="assets/js/app.js"></script>
-    <script>
-        // Cargar colores de empresa al iniciar
-        loadEmpresaColors();
     </script>
 
     <div class="container">
